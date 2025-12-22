@@ -30,7 +30,7 @@ const SpecialOffers = () => {
                 className="absolute w-auto h-auto -top-3 -right-18.5 xl:-right-4 xl:-top-8 xl:w-82.5 xl:h-auto"
               />
             </button>
-            <button className="relative w-full md:w-88.25 xl:w-146 h-42.5 xl:h-50 rounded overflow-hidden cursor-pointer hover:shadow-(--shadow-button-default) duration-300">
+            <button className="relative max-w-full md:max-w-88.25 xl:max-w-146 h-42.5 xl:h-50 rounded overflow-hidden cursor-pointer hover:shadow-(--shadow-button-default) duration-300">
               {/* Баннер акций - мобильная/планшетная версия */}
               <div className="xl:hidden w-full h-full">
                 <Image

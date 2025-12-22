@@ -27,11 +27,11 @@ const ProductCard = ({
 
     const priceByCard= isNewProduct ? basePrice :  calculatePriceByCard(finalPrice, cardDiscountPercent);
 
- 
+    const ratingValue = rating.rate || 4 ;
 
   return (
-    <div className="flex flex-col justify-between w-40 rounded overflow-hidden bg-amber-50 md:w-56 xl:w-68 align-top p-0 hover:shadow-(--shadow-article) duration-300 border border-b-cyan-950">
-      <div className="relative w-40 h-40 md:w-56 xl:w-68">
+    <div className="flex flex-col justify-between w-40 rounded-lg overflow-hidden bg-white md:w-56 xl:w-68 align-top p-0 hover:shadow-(--shadow-article) duration-300 border-8 border-b-cyan-950">
+      <div className="relative w-40 h-40 md:w-56 xl:w-68 ">
         <Image
           src={img}
           alt="Sale"
@@ -39,7 +39,7 @@ const ProductCard = ({
           className="object-contain"
           sizes="(max-width:768px) 160px, (max-width:1200px) 224px, 272px,"
         />
-        <button className="w-8 h-8 p-2 bg-amber-50 hover:bg-amber-200 absolute top-0 right-2 opacity-50 rounded cursor-pointer duration-300">
+        <button className="w-8 h-8 p-2 bg-white hover:bg-amber-200 absolute top-0 right-4 opacity-50 rounded cursor-pointer duration-300">
           <Image
             src="heart.svg"
             alt="Favorites"
@@ -79,8 +79,8 @@ const ProductCard = ({
         <div className="h-13.5 text-xs md:text-base text-gray-600 line-clamp-3 md:line-clamp-2 leading-normal">
           {description}
         </div>
-        {rating && (
-            <StarRaiting rating={rating}/>
+        {ratingValue && (
+            <StarRaiting rating={ratingValue}/>
         )}
         <button className="border border-(--color-primary) hover:text-amber-50 hover:bg-amber-600 hover:border-transparent active:shadow-(--shadow-button-active) w-full h-10 rounded p-2 justify-center items-center text-(--color-primary) transition-all duration-300 cursor-pointer select-none">
           In Cart

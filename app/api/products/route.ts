@@ -1,5 +1,6 @@
 import { getDB } from "@/utils/api-routes";
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export async function GET(request: Request) {
@@ -8,7 +9,7 @@ export async function GET(request: Request) {
 
         if(!category){
             return NextResponse.json(
-                {message: "Category paramer REQUIRED"},
+                {message: "Category parameter REQUIRED"},
                 {status: 400}
             )
         }

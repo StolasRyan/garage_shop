@@ -1,6 +1,6 @@
 import { getDB } from "@/utils/api-routes";
 import { NextResponse } from "next/server";
-export const revalidate = 3600;
+
 
 export async function GET() {
     try{

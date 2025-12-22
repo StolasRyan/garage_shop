@@ -1,4 +1,4 @@
-export interface Article{
+export interface ArticleCradProps{
     _id: string;
     img:string;
     title:string;
