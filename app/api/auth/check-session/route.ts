@@ -1,0 +1,21 @@
+import { getBetterAuthSession, getCustomSessionToken, validateCustomSession } from "@/utils/auth-helpers";
+import { NextResponse } from "next/server";
+
+
+
+export async function GET(request:Request) {
+    try {
+        const betterAuthSession = await getBetterAuthSession(request.headers);
+        if(betterAuthSession) return NextResponse.json({isAuth: true});
+        console.log('betterAuthSession:', betterAuthSession);
+        const sessionToken = getCustomSessionToken(request.headers.get('cookie'));
+        if(!sessionToken) return NextResponse.json({isAuth:false});
+
+        const isAuth = await validateCustomSession(sessionToken);
+        console.log('isAuth result:', isAuth);
+        return NextResponse.json({isAuth})
+    } catch (error) {
+        console.error("Error in check-session:", error);
+        return NextResponse.json({isAuth: false})
+    }
+}

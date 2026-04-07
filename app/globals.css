@@ -12,11 +12,12 @@
   --font-mono: var(--font-geist-mono);
   --shadow-default: 2px 4px 8px 0px rgba(0, 0, 0, 0.1);
   --color-primary: #3b3787;
-  --shadow-button-default: 4px 8px 16px 0px rgba(112,192,91,0.2);
+  --shadow-button-default: 4px 8px 16px 0px rgba(59, 55, 135, 0.1);
   --shadow-button-active: inset 0px 2px 0px 0px rgba(0,0,0,0.2);
-  --shadow-article: 4px 8px 16px 0px rgba(255, 102,51, 0.2);
-  --shadow-card-shop: 4px 8px 16px 0px rgba(255, 102, 51, 0.2);
-  --shadow-secondary: 4px 8px 16px 0px rgba(0,0,0,0.1)
+  --shadow-article: 4px 8px 16px 0px rgba(59, 55, 135, 0.3);
+  --shadow-card-shop: 4px 8px 16px 0px rgba(59, 55, 135, 0.2);
+  --shadow-secondary: 4px 8px 16px 0px rgba(0,0,0,0.1);
+  --shadow-catalog-menu: 0px 8px 16px 0px rgba(0,0,0,0.15);
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -27,11 +28,65 @@
 } */
 
 body {
+  margin: 0 auto;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .no-ymaps-copyright [class*="copyrights-pane"]{
   visibility: hidden;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }

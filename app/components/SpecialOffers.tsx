@@ -28,6 +28,7 @@ const SpecialOffers = () => {
                 width={220}
                 height={110}
                 className="absolute w-auto h-auto -top-3 -right-18.5 xl:-right-4 xl:-top-8 xl:w-82.5 xl:h-auto"
+                priority={false}
               />
             </button>
             <button className="relative max-w-full md:max-w-88.25 xl:max-w-146 h-42.5 xl:h-50 rounded overflow-hidden cursor-pointer hover:shadow-(--shadow-button-default) duration-300">
@@ -39,7 +40,8 @@ const SpecialOffers = () => {
                   width={353}
                   height={170}
                   className="w-full h-full object-cover rounded"
-                  priority
+                  priority = {false}
+                  
                 />
               </div>
 
@@ -51,7 +53,7 @@ const SpecialOffers = () => {
                   width={584}
                   height={200}
                   className="w-full h-full object-cover rounded"
-                  priority
+                  priority = {false}
                 />
               </div>
             </button>

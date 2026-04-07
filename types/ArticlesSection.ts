@@ -1,10 +1,10 @@
-import { Article } from "./articlesListProps"
+import { ArticleCradProps } from "./articlesListProps"
 export interface ArticleSectionProps {
     title: string;
-    viewAllButton: {
+    viewAllButton?: {
         text: string;
         href: string;
     };
-    articles: Article[];
+    articles: ArticleCradProps[];
     compact?: boolean;
 }

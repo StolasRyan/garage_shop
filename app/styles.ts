@@ -1,0 +1,34 @@
+export const buttonStyles = {
+  base: "w-65 h-17 my-10 mx-auto text-2xl rounded cursor-pointer transition-all duration-200",
+  active:
+    "bg-(--color-primary) text-white hover:shadow-(--shadow-article) active:shadow-(--shadow-button-active)",
+  inactive: "bg-primary/40 text-white",
+};
+
+export const formStyles = {
+  label: "text-base text-[#8f8f8f] block",
+  input:
+    "w-65 h-10 py-2 px-4 text-[#414141] text-base border border-[#bfbfbf] rounded focus:border-(--color-primary) focus:shadow-(--shadow-button-default) focus:bg-white focus:outline-none caret-(--color-primary)",
+  loginLink:
+    "mb-10 mx-auto h-8 text-(--color-primary) hover:text-white active:text-white border-1 border-(--color-primary) bg-white hover:bg-(--color-primary) active:shadow-(--shadow-button-default) w-30 rounded flex items-center justify-center duration-300",
+  radioLabel: "px-4 py-2 border rounded-lg cursor-pointer transition-colors",
+  radioLabelActive: "bg-blue-500 text-white border-blue-500",
+};
+
+export const verificationButtonStyles = `
+    w-60 md:w-80 group relative flex flex-col items-center justify-center p-3 
+    border-2 border-gray-200 rounded-xl hover:border-primary 
+    hover:shadow-(--shadow-article) active:shadow-(--shadow-button-active) 
+    cursor-pointer duration-300
+  `;
+
+  export const iconContainerStyles = `
+    p-3 mb-4 rounded-full bg-gray-100 
+    group-hover:bg-primary duration-300
+  `;
+
+  export const profileStyles = {
+    editButton: `${buttonStyles.active} [&&]:w-full [&&]:md:w-auto  px-4 py-2 rounded items-center justify-center flex flex-row gap-x-3`,
+    canselButton:"px-4 py-2 md:flex-none flex-1 bg-gray-100 rounded hover:shadow-(--shadow-button-secondary) active:shadow-(--shadow-button-active) text-gray-600 duration-300 cursor-pointer flex flex-row gap-x-3",
+    saveButton:"px-4 py-2 md:flex-none flex-1 bg-primary rounded hover:shadow-(--shadow-button-default) active:shadow-(--shadow-button-active)  text-white duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer "
+  }

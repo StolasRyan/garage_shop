@@ -1,19 +1,21 @@
+import { CONFIG } from "@/config/config";
 import ArticleSection from "./ArticleSection";
 import fetchArticles from "./fetchArticles";
+import ErrorComponent from "../components/ErrorComponent";
 
 const Articles = async () => {
   try {
-    const articles = await fetchArticles();
+    const {items} = await fetchArticles({articlesLimit: CONFIG.ITEMS_PER_PAGE_MAIN_ARTICLES});
     return (
       <ArticleSection
         title="Articles"
         viewAllButton={{ text: "All Articles", href: "articles" }}
-        articles={articles}
+        articles={items}
         compact
       />
     );
-  } catch {
-    return <div className="text-red-500">Error to find articles</div>;
+  } catch (e){
+    return <ErrorComponent error={e instanceof Error ? e.message : new Error(String(e))} userMessage="Articles error"/>
   }
 };
 

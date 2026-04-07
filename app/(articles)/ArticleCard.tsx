@@ -11,8 +11,9 @@ const ArticleCard = ({img, title, text, createdAt}:ArticleCradProps) => {
                     alt={title}
                     fill
                     className="object-cover"
-                    quality={[100, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 75]} 
+                    quality={100} 
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    priority={false}
                   />
                 </div>
                 <div className="p-2.5 flex-1 flex flex-col gap-y-2.5 leading-normal">

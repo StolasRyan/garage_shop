@@ -1,5 +1,7 @@
-import fetchProductsByCategory from "../fetchProducts";
+import { Suspense } from "react";
+import fetchProductsByTag from "../fetchProducts";
 import GenericListPage from "../GenericListPage";
+import { Loader } from "@/app/components/Loader";
 
 
 export const metadata ={
@@ -10,15 +12,18 @@ export const metadata ={
 
 const AllSales = async ({searchParams}:{searchParams: Promise<{page?: string, itemsPerPage?: string}>}) => {
 
-  return <GenericListPage 
+  return (
+    <Suspense fallback={<Loader/>}>
+      <GenericListPage 
   searchParams={searchParams} 
   props={{
-    fetchData: () => fetchProductsByCategory("actions"),
+    fetchData: ({pagination: {startIndex, perPage}}) => fetchProductsByTag("actions", {pagination: {startIndex, perPage}}),
     pageTitle: "All Sales",
-    basePath: "/sales",
-    errorMessage: "Error, failed to fetch SALE products"
+    basePath: "/sales"
   }}
   />
+    </Suspense>
+  )
 };
 
 export default AllSales;

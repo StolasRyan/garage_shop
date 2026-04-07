@@ -1,0 +1,28 @@
+import React from 'react'
+import { formatDateFull, formatDateNumeric } from '../utils/dateFormatters'
+
+const ScheduleTableHeader = ({dates}: {dates:string[]}) => {
+  return (
+    <div className='grid grid-cols-4 border-b border-gray-700'>
+        <div className='p-2 md:p-3 font-semibold text-gray-600 border-r border-gray-200 text-xs md:text-sm'>
+            Time
+        </div>
+        {dates.map((date)=>(
+            <div 
+            key={date} 
+            className="p-2 md:p-3 font-semibold text-gray-900 text-center border-r border-gray-200 last:border-r-0"
+            >
+                <div className='font-medium text-xs md:text-sm'></div>
+                <div className='text-xs text-gray-500 mt-1'>
+                    {formatDateNumeric(date)}
+                </div>
+                <div className='text-xs text-gray-500 hidden xs:block'>
+                    {formatDateFull(date)}
+                </div>
+            </div>
+        ))}
+    </div>
+  )
+}
+
+export default ScheduleTableHeader

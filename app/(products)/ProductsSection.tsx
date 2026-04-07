@@ -7,22 +7,29 @@ const ProductsSection = ({
   viewAllButton,
   products,
   compact = false,
-}: ProductsSectionProps) => {
+  applyIndexByStyles = true,
+  contentType
+}: ProductsSectionProps & { applyIndexByStyles?: boolean; contentType?: string}) => {
+  
+  const gridClasses = contentType === 'category' ? 'grid-cols-2 md:grid-cols-3' :  'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+
   return (
     <section>
       <div
-        className={`flex flex-col justify-center xl:max-w-302 ${
-          compact ? "px-[max(12px, calc((100%-1208px)/2))] mt-20" : ""
+        className={`flex flex-col  justify-center xl:max-w-302 ${
+          compact ? "px-[max(12px,calc((100%-1208px)/2))]" : "mt-20"
         }`}
       >
-        <div className="mb-4 md:mb-8 xl:mb-10 flex flex-row justify-between">
+        <div className="mb-4 md:mb-8 lg:mb-10 flex flex-row justify-between">
           <h2 className="text-2xl md:text-4xl text-left font-bold">{title}</h2>
-          <ViewAllButton
+          {viewAllButton && (<ViewAllButton
             btnText={viewAllButton.text}
             href={viewAllButton.href}
-          />
+          />)}
+          
         </div>
-        <ul className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">
+        {products && products.length > 0 ? (
+          <ul className={`px-8 grid ${gridClasses} gap-4 md:gap-6 lg:gap-7 xl:gap-8`}>
           {products.map((product, index) => (
             <li
               key={product._id}
@@ -35,6 +42,10 @@ const ProductsSection = ({
             </li>
           ))}
         </ul>
+        ):(
+          <div>No products found</div>
+        )}
+        
       </div>
     </section>
   );

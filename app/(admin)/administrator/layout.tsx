@@ -1,0 +1,43 @@
+'use client'
+
+import { Loader } from '@/app/components/Loader';
+import { useAuthStore } from '@/store/authStore'
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
+
+const AdminLayout = ({children}:{children:React.ReactNode}) => {
+    const {user, isLoading, checkAuth}=useAuthStore();
+    const [isChecking, setIsChecking] = useState(true);
+    const router = useRouter();
+
+    useEffect(()=>{
+        const verifyAccess = async()=>{
+            await checkAuth();
+            setIsChecking(false);
+        }
+        verifyAccess();
+    },[checkAuth]);
+
+    useEffect(()=>{
+        if(!isChecking){
+            const hasAccess = user && (user.role === 'admin' || user.role === 'manager');
+            if(!hasAccess){
+                router.replace('/')
+            }
+        }
+    },[isChecking, router, user]);
+
+    if(isLoading || isChecking){
+        return <Loader/>
+    }
+
+    if(!user || (user.role !== 'admin' && user.role !== 'manager')){
+        return null
+    }
+
+  return (
+    <>{children}</>
+  )
+}
+
+export default AdminLayout

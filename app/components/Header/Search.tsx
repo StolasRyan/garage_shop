@@ -1,12 +1,12 @@
 
-import InputBlock from "./InputBlock";
+import InputBlock from "./inputSearch/InputBlock";
 import SearchButton from "./SearchButton";
 
-const Search = () => {
+const Search = ({onFocusChangeAction}:{onFocusChangeAction:(focused:boolean)=>void}) => {
   return (
     <div className='flex flex-row gap-4 grow'>
       <SearchButton />
-      <InputBlock />
+      <InputBlock onFocusChangeAction={onFocusChangeAction}/>
       
     </div>
   )
