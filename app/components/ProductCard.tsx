@@ -7,7 +7,7 @@ import Link from "next/link";
 import uncknown from '../../public/images/unknown.png';
 import { CONFIG } from "@/config/config";
 import FavoriteButton from "./FavoriteButton";
-import { calculateFinalPrise, calculatePriceByCard } from "@/utils/calcPrices";
+import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
 import AddToCartButton from "./AddToCartButton";
 
 
@@ -29,7 +29,7 @@ const ProductCard = ({
   const isNewProduct = tags?.includes("new");
    
 
-    const finalPrice = isNewProduct ? basePrice : calculateFinalPrise(basePrice, discountPercent);
+    const finalPrice = isNewProduct ? basePrice : calculateFinalPrice(basePrice, discountPercent);
 
     const priceByCard= isNewProduct ? basePrice :  calculatePriceByCard(finalPrice, CONFIG.CARD_DISCOUNT_PERCENT);
 

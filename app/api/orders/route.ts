@@ -1,0 +1,88 @@
+import { getDB } from "@/utils/api-routes";
+import { getServerUserId } from "@/utils/getServerUserId";
+import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
+
+
+
+export async function POST(request: Request) {
+    try {
+        const db = await getDB();
+        const orderData = await request.json();
+
+        const userId = await getServerUserId();
+
+        if(!userId){
+            return NextResponse.json(
+                {message: 'Not autorized'},
+                {status: 401}
+            )
+        }
+
+        const user = await db.collection('user').findOne({_id: ObjectId.createFromHexString(userId)});
+
+        if(!user){
+            return NextResponse.json(
+                {message: 'User not found'},
+                {status: 404}
+            )
+        }
+
+        const roundedUsedBonuses = Math.floor(orderData.usedBonuses || 0);
+        const roundedEarnedBonuses = Math.floor(orderData.totalBonuses || 0);
+        const roundedTotalAmount = Math.round((orderData.finalPrice || 0) * 100) / 100;
+        const roundedDiscountAmount = Math.round((orderData.totalDiscount || 0) * 100) / 100;
+
+
+        const order = {
+            userId: userId,
+            orderNumber: `${Date.now()}-${Math.floor(Math.random() * 900 + 100)}`,
+            status: 'pending',
+            paymentMethod: orderData.paymentMethod,
+            paymentStatus: orderData.paymentMethod === 'cash_on_delivery' ? 'pending' : 'waiting',
+            totalAmount: roundedTotalAmount,
+            discountAmount: roundedDiscountAmount,
+            usedBonuses: roundedUsedBonuses,
+            earnedBonuses: roundedEarnedBonuses,
+            deliveryAddress: orderData.deliveryAddress,
+            deliveryDate: orderData.deliveryTime.date,
+            deliveryTimeSlot: orderData.deliveryTime.timeSlot,
+            surname: user.surname,
+            name: user.name,
+            phone: user.phoneNumber,
+            gender: user.gender,
+            birthday: user.birthdayDate,
+            items: orderData.cartItems.map(
+                (item:{
+                    productId:string,
+                    quantity:number,
+                    price:number,
+                    discountPercent?:number,
+                    hasLoyaltyDiscount?:boolean,
+                })=>({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    price: Math.round((item.price || 0)*100)/100,
+                    discountPercent: item.discountPercent,
+                    hasLoyaltyDiscount: item.hasLoyaltyDiscount
+                })
+            ),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const result = await db.collection('orders').insertOne(order);
+
+        return NextResponse.json({
+            success: true,
+            order:{
+                ...order,
+                _id: result.insertedId
+            },
+            orderNumber: order.orderNumber
+        })
+    } catch (error) {
+        console.error("Failed to create order", error);
+        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    }
+}

@@ -14,6 +14,8 @@ import CartControls from "./_components/CartControls";
 import CartItem from "./_components/CartItem";
 import { usePricing } from "@/app/hooks/usePricing";
 import CartSideBar from "./_components/CartSideBar";
+import CheckoutForm from "./_components/CheckoutForm";
+import { DeliveryAdress, DeliveryTime } from "@/types/order";
 
 const CartPage = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -21,49 +23,57 @@ const CartPage = () => {
     [key: string]: ProductCardProps;
   }>({});
   const [bonusesCount, setBonusesCount] = useState<number>(0);
-  const [hasLoyaltyCard, setHasLoyaltyCard] = useState<boolean>(false);
   const [removedItems, setRemovedItems] = useState<string[]>([]);
   const [isCartLoading, setIsCartLoading] = useState(true);
-  const [useBonuses, setUseBonuses] = useState<boolean>(false);
-  const { cartItems, updateCart } = useCartStore();
+  const [title, setTitle] = useState<string>("Cart");
+  const [deliveryData, setDeliveryData] = useState<{
+    address: DeliveryAdress;
+    time: DeliveryTime;
+    isValid: boolean;
+  } | null>(null);
+
+  const habdleFormDataChange = useCallback(
+    (data: {
+      address: DeliveryAdress;
+      time: DeliveryTime;
+      isValid: boolean;
+    }) => {
+      setDeliveryData(data);
+    },
+    [],
+  );
+
+  const {
+    cartItems,
+    updateCart,
+    hasLoyaltyCard,
+    setHasLoyaltyCard,
+    useBonuses,
+    isCheckout,
+    isOrdered,
+  } = useCartStore();
+
+  const sideBarProps = {
+    deliveryData,
+    productsData,
+  };
+
   const visibleCartItems = cartItems.filter(
     (item) => !removedItems.includes(item.productId),
   );
 
-  const avilebleCartItems = visibleCartItems.filter((item) => {
+  const availableCartItems = visibleCartItems.filter((item) => {
     const product = productsData[item.productId];
     return product && product.quantity > 0;
   });
 
-  const priceData = usePricing({
-    avilebleCartItems,
+  usePricing({
+    availableCartItems,
     productsData,
     hasLoyaltyCard,
     bonusesCount,
     useBonuses,
   });
-
-  const {
-    totalPrice,
-    totalMaxPrice,
-    totalDiscount,
-    finalPrice,
-    totalBonuses,
-    isMinimumReached,
-  } = priceData;
-
-  const commonSideBarProps = {
-    bonusesCount,
-    useBonuses,
-    onUseBonusesChange: setUseBonuses,
-    totalPrice,
-    visibleCartItems,
-    totalMaxPrice,
-    totalDiscount,
-    finalPrice,
-    totalBonuses,
-    isMinimumReached,
-  };
 
   const fetchCartAndProducts = async () => {
     setIsCartLoading(true);
@@ -103,6 +113,10 @@ const CartPage = () => {
       setIsCartLoading(false);
     }
   };
+
+  useEffect(() => {
+    setTitle(isCheckout ? "Delivery" : "Cart");
+  }, [isCheckout]);
 
   useEffect(() => {
     fetchCartAndProducts();
@@ -189,30 +203,40 @@ const CartPage = () => {
 
   return (
     <div className="px-[max(12px,calc((100%-1208px)/2))] md:px-[max(16px,calc((100%-1208px)/2))] text-gray-600 mx-auto ">
-      <CartHeader itemCount={visibleCartItems.length} />
-      <CartControls
-        isAllSelected={isAllSelected}
-        selectedItemsCount={selectedItems.length}
-        onSelectAll={selectAllItems}
-        onDeselectAll={deselectAllItems}
-        onRemoveSelected={handleRemoveSelected}
-      />
+      <CartHeader itemCount={visibleCartItems.length} title={title} />
+
       <div className="flex flex-col md:flex-row gap-8 xl:gap-x-15">
-        <div className="flex flex-col gap-y-6">
-          {visibleCartItems.map((item) => (
-            <CartItem
-              key={item.productId}
-              item={item}
-              productData={productsData[item.productId]}
-              isSelected={selectedItems.includes(item.productId)}
-              onSelectionChange={handleItemSelection}
-              onQuantityUpdate={handleQuantityUpdate}
-              hasLoyaltyCard={hasLoyaltyCard}
-            />
-          ))}
+        <div
+          className={`flex-1 ${isOrdered ? "pointer-events-none opacity-50" : ""}`}
+        >
+          {!isCheckout ? (
+            <>
+              <CartControls
+                isAllSelected={isAllSelected}
+                selectedItemsCount={selectedItems.length}
+                onSelectAll={selectAllItems}
+                onDeselectAll={deselectAllItems}
+                onRemoveSelected={handleRemoveSelected}
+              />
+              <div className="flex flex-col gap-y-6">
+                {visibleCartItems.map((item) => (
+                  <CartItem
+                    key={item.productId}
+                    item={item}
+                    productData={productsData[item.productId]}
+                    isSelected={selectedItems.includes(item.productId)}
+                    onSelectionChange={handleItemSelection}
+                    onQuantityUpdate={handleQuantityUpdate}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <CheckoutForm onFormDataChange={habdleFormDataChange} />
+          )}
         </div>
 
-       <CartSideBar {...commonSideBarProps}/>
+        <CartSideBar {...sideBarProps} />
       </div>
     </div>
   );

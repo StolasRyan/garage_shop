@@ -1,3 +1,4 @@
+import { DeliveryAdress, DeliveryTime } from "./order";
 import { ProductCardProps } from "./product";
 
 export interface CartItem {
@@ -13,9 +14,26 @@ export interface CartItemProps{
     isSelected: boolean;
     onSelectionChange: (productId: string, isSelected: boolean) => void;
     onQuantityUpdate: (productId: string, newQuantity: number) => void;
-    hasLoyaltyCard: boolean
 }
 
+export interface CartSummaryProps {
+  deliveryData?:{
+    address: DeliveryAdress;
+    time: DeliveryTime;
+    isValid: boolean;
+  } | null;
+  productsData?: {[key: string]: ProductCardProps};
+}
+
+export interface CartSidebarProps{
+  onCheckout?: () => void;
+  deliveryData?:{
+    address: DeliveryAdress;
+    time: DeliveryTime;
+    isValid: boolean;
+  } | null;
+  productsData?: {[key: string]: ProductCardProps};
+}
 export interface CartBaseProps{
   visibleCartItems: CartItem[];
   totalMaxPrice: number;
@@ -31,5 +49,3 @@ export interface BonusesSectionProps{
     onUseBonusesChange: (use: boolean) => void;
     totalPrice: number;
 }
-
-export interface CartSideBarProps extends CartBaseProps, BonusesSectionProps{}

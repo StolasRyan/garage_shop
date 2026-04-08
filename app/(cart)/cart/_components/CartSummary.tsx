@@ -1,70 +1,200 @@
 import { buttonStyles } from "@/app/styles";
-import Bonuses from "@/app/(catalog)/catalog/[category]/(productPage)/[id]/_components/Bonuses";
-import { CartItem } from "@/types/cart";
-import { formatPrice } from "@/utils/formatPrice";
-import { getGoodsWord } from "@/utils/getGoodsWord";
+import { useCartStore } from "@/store/cartStore";
+import { CONFIG } from "@/config/config";
+import { CartSummaryProps } from "@/types/cart";
+import { useState } from "react";
+import { CartItemWithPrice } from "@/types/order";
+import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
+import { createOrderAction } from "@/actions/orderDelivery";
+import OrderSuccessMessage from "./OrderSuccessMessage";
+import PriceSummary from "./PriceSummary";
+import MinimumOrderWarning from "./MinimumOrderWarning";
+import CheckoutButton from "./CheckoutButton";
 
-interface CartSummaryProps {
-  visibleCartItems: CartItem[];
-  totalMaxPrice: number;
-  totalDiscount: number;
-  finalPrice: number;
-  totalBonuses: number;
-  isMinimumReached: boolean;
+const CartSummary = ({ deliveryData, productsData = {} }: CartSummaryProps) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  const [paymentType, setPaymentType] = useState< "online" | "cash" | null >(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const {
+    pricing,
+    cartItems,
+    hasLoyaltyCard,
+    isOrdered,
+    setIsOrdered,
+    isCheckout,
+    setIsCheckout,
+  } = useCartStore();
+  const visibleCartItems = cartItems.filter((item) => item.quantity > 0);
+  const {
+    totalPrice,
+    totalMaxPrice,
+    totalDiscount,
+    finalPrice,
+    totalBonuses,
+    maxBonusUse,
+    isMinimumReached,
+  } = pricing;
+  const usedBonuses = Math.min(
+    maxBonusUse,
+    Math.floor((totalPrice * CONFIG.MAX_BOUSES_PERCENT) / 100),
+  );
+
+  const handleOnlinePayment = () => {
+    if (!deliveryData) {
+      console.error("Delivery data not found");
+      return;
+    }
+    console.log("Online payment");
+  };
+
+  const handleCashPayment =async()=>{
+    if(!deliveryData){
+      console.error("Delivery data are not filled");
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      const cartItemsWithPrices:CartItemWithPrice[] = visibleCartItems.map(
+      (item)=>{
+        const product = productsData[item.productId];
+        if(!product){
+          return {
+            productId: item.productId,
+            quantity: item.quantity,
+            price: 0,
+          }
+        }
+
+        const priceWithDiscount = calculateFinalPrice(
+          product.basePrice,
+          product.discountPercent || 0,
+        );
+
+        const finalPrice = hasLoyaltyCard
+          ? calculatePriceByCard(priceWithDiscount, CONFIG.CARD_DISCOUNT_PERCENT)
+          : priceWithDiscount;
+
+        return {
+          productId: item.productId,
+          quantity: item.quantity,
+          price: finalPrice,
+          basePrice: product.basePrice,
+          discountPercent: product.discountPercent || 0,
+          hasLoyaltyDiscount: hasLoyaltyCard
+        }
+      }
+    )
+
+    const result = await createOrderAction({
+      finalPrice,
+      totalBonuses,
+      usedBonuses,
+      totalDiscount,
+      deliveryAddress: deliveryData.address,
+      deliveryTime: deliveryData.time,
+      cartItems: cartItemsWithPrices,
+      totalPrice: totalMaxPrice,
+      paymentMethod: 'cash_on_delivery'
+    });
+
+    setOrderNumber(result.orderNumber);
+    setIsOrdered(true);
+    } catch (error: unknown) {
+      console.error("Error creating order", error);
+      const errorMessage = 
+      error instanceof Error ? error.message : "Unknown error";
+      alert(`Error creating order: ${errorMessage}`);
+    }finally{
+      setIsProcessing(false);
+    }
+  }
+
+  const isFormValid = ():boolean=>{
+    if(!deliveryData){
+      return false;
+  }
+  const {address, time} = deliveryData;
+
+  const isAddressValid =Boolean(
+    address.city?.trim() && address.street?.trim() && address.house?.trim()
+  )
+
+  const isTimeValid = Boolean(time.date?.trim() && time.timeSlot?.trim());
+
+  const isValidForm = 
+  isAddressValid &&
+  isTimeValid &&
+  isMinimumReached &&
+  visibleCartItems.length > 0;
+
+  return isValidForm
 }
 
-const CartSummary = ({
-  visibleCartItems,
-  totalMaxPrice,
-  totalDiscount,
-  finalPrice,
-  totalBonuses,
-  isMinimumReached,
-}: CartSummaryProps) => {
+  const canProceedWithPayment = ():boolean=>{
+    return isFormValid() && !isProcessing;
+  }
+
   return (
     <>
-    <div className="flex flex-col gap-y-2.5 pb-6 border-b-2 border-gray-200">
-        <div className="flex flex-row justify-between">
-            <p className="text-gray-500">
-                {visibleCartItems.length} {getGoodsWord(visibleCartItems.length)}
-            </p>
-            <p className="">-{formatPrice(totalMaxPrice)} </p>
-        </div>
+      <PriceSummary
+      visibleCartItems={visibleCartItems}
+      totalMaxPrice={totalMaxPrice}
+      totalDiscount={totalDiscount}
+      finalPrice={finalPrice}
+      totalBonuses={totalBonuses}
+      />
 
-        <div className="flex flex-row justify-between">
-            <p className="text-gray-500">Discount</p>
-            <p className="text-primary"> {formatPrice(totalDiscount)} ₽</p>
-        </div>
-    </div>
-
-    <div className="flex flex-col items-end justify-between gap-y-6">
-        <div className="text-base text-gray-500 flex flex-row justify-between items-center w-full">
-            <span>Total:</span>
-            <span className="font-bold text-2xl text-gray-600">{formatPrice(finalPrice)} ₽</span>
-        </div>
-        <Bonuses bonus={totalBonuses}/>
+      
         <div className="w-full">
-            {!isMinimumReached && (
-                <div className="bg-[#d80000] rounded text-white text-xs text-center mx-auto py-0.75 px-1.5 mb-4 w-full">
-                    Minimum order amount 1000 ₽
-                </div>
-            )}
+          <MinimumOrderWarning isMinimumReached={isMinimumReached} />
 
-            <button
-            disabled={!isMinimumReached || visibleCartItems.length === 0}
-            className={`p-3 rounded mx-auto w-full text-2xl cursor-pointer ${
-              isMinimumReached && visibleCartItems.length > 0
-                ? buttonStyles.active
-                : buttonStyles.inactive
-            }`}
-          >
-            Check order
-          </button>
+          {!isCheckout ? (
+            <CheckoutButton
+            visibleCartItems={visibleCartItems}
+            isMinimumReached={isMinimumReached}
+            onCheckout={()=>setIsCheckout(true)}
+            isCheckout={isCheckout}
+            />
+          ) : (
+            <div className="flex flex-col gap-3">
+              {!isOrdered ? (
+                <>
+                  <button
+                    disabled={!canProceedWithPayment()}
+                    className={`rounded w-full text-xl h-15 items-center justify-center duration-300 ${
+                      canProceedWithPayment()
+                        ? buttonStyles.active
+                        : buttonStyles.inactive
+                    }`}
+                    onClick={handleOnlinePayment}
+                  >
+                    {isProcessing ? "Processing..." : "Pay online"}
+                  </button>
+
+                  <button
+                    disabled={!canProceedWithPayment()}
+                    onClick={handleCashPayment}
+                    className={`h-10 rounded w-full text-base justify-center items-center duration-300 ${
+                      canProceedWithPayment()
+                        ? "bg-primary hover:shadow-button-default active:shadow-button-active text-white cursor-pointer"
+                        : "bg-gray-300 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    {isProcessing ? "Processing..." : "Pay with cash"}
+                  </button>
+                </>
+              ) : (
+                <OrderSuccessMessage orderNumber={orderNumber} />
+              )}
+            </div>
+          )}
         </div>
-    </div>
-
     </>
-  )
+  );
 };
 
 export default CartSummary;

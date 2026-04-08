@@ -2,7 +2,7 @@
 import { CartItemProps } from "@/types/cart";
 import { memo, useState } from "react";
 import CartSkeletons from "./CartSkeletons";
-import { calculateFinalPrise, calculatePriceByCard } from "@/utils/calcPrices";
+import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
 import { CONFIG } from "@/config/config";
 import SelectionCheckbox from "./SelectionCheckbox";
 import ProductImage from "./ProductImage";
@@ -12,6 +12,7 @@ import DiscountBadge from "./DiscountBadge";
 import Tooltip from "@/app/(auth)/_components/Tooltip";
 import QuantitySelector from "./QuantitySelector";
 import { formatPrice } from "@/utils/formatPrice";
+import { useCartStore } from "@/store/cartStore";
 
 const CartItem = memo(function CartItem({
   item,
@@ -19,11 +20,12 @@ const CartItem = memo(function CartItem({
   isSelected,
   onSelectionChange,
   onQuantityUpdate,
-  hasLoyaltyCard,
+  
 }: CartItemProps) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const {hasLoyaltyCard} = useCartStore();
 
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 0) return;
@@ -53,7 +55,7 @@ const CartItem = memo(function CartItem({
 
   if (!productData) return <CartSkeletons />;
 
-  const priceWithDiscount = calculateFinalPrise(
+  const priceWithDiscount = calculateFinalPrice(
     productData.basePrice || 0,
     productData.discountPercent || 0,
   );
