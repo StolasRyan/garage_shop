@@ -15,7 +15,7 @@ import RatingDistribution from "./_components/RatingDistribution";
 import ReviewsWrapper from "./_components/ReviewsWrapper";
 import Sales from "@/app/(products)/Sales";
 import FavoriteButton from "@/app/components/FavoriteButton";
-import { calculateFinalPrise, calculatePriceByCard } from "@/utils/calcPrices";
+import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
 
 interface ProductPageContentProps {
   product: ProductCardProps;
@@ -27,7 +27,7 @@ const ProductPageContent = ({
   productId,
 }: ProductPageContentProps) => {
 
-  const priceWithDiscount = calculateFinalPrise(product.basePrice, product.discountPercent || 0);
+  const priceWithDiscount = calculateFinalPrice(product.basePrice, product.discountPercent || 0);
   const cardPrice = calculatePriceByCard(priceWithDiscount, CONFIG.BONUSES_PERCENT);
   const bonusesAmount = Math.round((priceWithDiscount * CONFIG.BONUSES_PERCENT) / 100);
 

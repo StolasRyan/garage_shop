@@ -28,4 +28,5 @@ export interface CartState {
   setIsOrdered: (isOrdered: boolean) => void;
   setHasLoyaltyCard: (value: boolean) => void;
   setUseBonuses: (value: boolean) => void;
+  resetAfterOrder: () => void;
 }

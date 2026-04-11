@@ -34,7 +34,7 @@ const defaultItemsPerPage = props.contentType === "category" ? CONFIG.ITEMS_PER_
           <ProductsSection
             title={props?.pageTitle}
             products={items as ProductCardProps[]}
-            applyIndexByStyles={props.contentType === "category" ? false : true}
+            applyIndexStyles={props.contentType === "category" ? false : true}
             contentType={props.contentType}
           />
         ) : (

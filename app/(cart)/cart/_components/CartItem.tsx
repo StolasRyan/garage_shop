@@ -1,6 +1,6 @@
 "use client";
 import { CartItemProps } from "@/types/cart";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import CartSkeletons from "./CartSkeletons";
 import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
 import { CONFIG } from "@/config/config";
@@ -26,6 +26,18 @@ const CartItem = memo(function CartItem({
   const [isUpdating, setIsUpdating] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const {hasLoyaltyCard} = useCartStore();
+
+  useEffect(()=>{
+    if(!productData)return;
+
+    const maxQuantity = productData.quantity;
+
+    if(quantity > maxQuantity){
+      console.log(`Correcting quantity from ${quantity} to ${maxQuantity}`)
+      setQuantity(maxQuantity)
+      onQuantityUpdate(item.productId, maxQuantity)
+    }
+  },[item.productId, onQuantityUpdate, productData, quantity])
 
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 0) return;

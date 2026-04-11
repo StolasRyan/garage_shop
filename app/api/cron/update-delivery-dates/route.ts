@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
             };
         }
     });
-    await db.collection("delivery-settings").updateOne(
+    await db.collection("delivery-times").updateOne(
       {},
       {
         $set:{

@@ -1,6 +1,12 @@
 import { DeliveryAdress, DeliveryTime } from "./order";
 import { ProductCardProps } from "./product";
 
+export interface DeliveryData{
+  address: DeliveryAdress;
+  time: DeliveryTime;
+  isValid?: boolean;
+}
+
 export interface CartItem {
   productId: string;
   quantity: number;
@@ -48,4 +54,23 @@ export interface BonusesSectionProps{
     useBonuses: boolean;
     onUseBonusesChange: (use: boolean) => void;
     totalPrice: number;
+}
+
+export interface CustomCartItem {
+  productId: string;
+  quantity: number;
+  price: number;
+  discountPercent: number;
+  hasLoyaltyDiscount: boolean;
+  addedAt: Date; 
+}
+
+export interface CustomPricing {
+  totalPrice: number;
+  totalMaxPrice: number;
+  totalDiscount: number;
+  finalPrice: number;
+  totalBonuses: number;
+  maxBonusUse: number;
+  isMinimumReached: boolean;
 }

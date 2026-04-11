@@ -9,7 +9,6 @@ export async function GET(request: Request) {
     const db = await getDB();
     const url = new URL(request.url);
     const tag = url.searchParams.get("tag");
-    const randomLimit = url.searchParams.get("randomLimit");
     const startIndex = parseInt(url.searchParams.get("startIndex") || "0");
     const perPage = parseInt(
       url.searchParams.get("perPage ") || CONFIG.ITEMS_PER_PAGE.toString()
@@ -25,19 +24,7 @@ export async function GET(request: Request) {
     const query = {
       tags: tag,
       quantity: { $gt: 0 },
-    };
-
-    if (randomLimit) {
-      const pipeline = [
-        { $match: query },
-        { $sample: { size: parseInt(randomLimit) } },
-      ];
-      const products = await db
-        .collection("products")
-        .aggregate(pipeline)
-        .toArray();
-      return NextResponse.json(products);
-    }
+    }; 
 
     const totalCount = await db.collection("products").countDocuments(query);
 

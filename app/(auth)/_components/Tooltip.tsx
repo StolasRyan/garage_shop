@@ -2,13 +2,14 @@ import Image from "next/image";
 
 type TooltipProps={
   text: string, 
-  position?: 'bottom' | 'top'
+  position?: 'bottom' | 'top',
+  cardPosition?:boolean
 }
 
-const Tooltip = ({text, position = 'bottom'}:TooltipProps) => {
+const Tooltip = ({text, position = 'bottom', cardPosition = false}:TooltipProps) => {
   return (
     <div className={`absolute left-0  mt-4 w-full transition-all duration-300 ease-in-out
-      ${position === 'top' ? '-top-12' : ''} 
+      ${position === 'top' ? (cardPosition ? '-top-30 ' :'-top-14.75') : ''} 
     `}>
       <div className={`relative bg-[#d80000] text-white text-sm p-2 rounded max-w-65 mx-auto flex items-center z-50 opacity-0 animate-fadeIn ${position === 'bottom' ? 'mb-2' : 'mt-1'}`}>
         <Image

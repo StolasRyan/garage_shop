@@ -62,7 +62,7 @@ export async function addToCartAction(
     if(existingCartItem){
         return{
             success: false,
-            message: "",
+            message: "Product already in cart",
         }
     }
 

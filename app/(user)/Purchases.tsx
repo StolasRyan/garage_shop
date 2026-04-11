@@ -14,6 +14,7 @@ const Purchaes =  () => {
   const [error, setError]= useState<Error | null>(null);
   const [items, setItems] = useState<ProductCardProps[]>([]);
   const {user, isAuth} = useAuthStore();
+  const userId = user?.id
 
   useEffect(()=>{
     const checkAccessAndFetchData = async()=>{
@@ -24,6 +25,7 @@ const Purchaes =  () => {
         if(hasAccess){
           const {items:purchases} = await fetchPurchases({
             userPurchsesLimit: CONFIG.ITEMS_PER_PAGE_MAIN_PRODUCTS,
+            userId
           });
           setItems(purchases)
         }
@@ -35,7 +37,7 @@ const Purchaes =  () => {
       }
     }
     checkAccessAndFetchData()
-  },[isAuth, user]);
+  },[isAuth, user, userId]);
 
   if(!shouldShow) return null;
 
@@ -55,7 +57,6 @@ const Purchaes =  () => {
         title="Purchases"
         viewAllButton={{ text: "Purchased before", href: "purchases" }}
         products={items}
-        compact
       />
     );
 

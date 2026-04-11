@@ -1,30 +1,37 @@
 "use client";
 import { addToCartAction } from "@/actions/addToCartActions";
-import CartActionMessage from "@/app/components/CartActionMessage";
+import Tooltip from "@/app/(auth)/_components/Tooltip";
 import { useCartStore } from "@/store/cartStore";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 const CartButton = ({ productId }: { productId: string }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipMessage, setTooltipMessage] = useState("");
       const {fetchCart} = useCartStore();
+
+      const showMessage = (message: string)=>{
+        setTooltipMessage(message);
+        setShowTooltip(true);
+        setTimeout(() => {
+          setShowTooltip(false);
+        }, 3000);
+      }
 
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    setMessage(null);
+    setShowTooltip(false);
     try {
       const result = await addToCartAction(productId);
-      setMessage(result);
       if (result.success) {
         await fetchCart();
+      }else if(result.message){
+        showMessage(result.message);
       }
     } catch {
-      setMessage({ success: false, message: "Error adding to cart" });
+      showMessage("Error adding to cart");
     } finally {
       setIsLoading(false);
     }
@@ -32,6 +39,9 @@ const CartButton = ({ productId }: { productId: string }) => {
 
   return (
     <div className="relative">
+      {showTooltip && (
+        <Tooltip text={tooltipMessage} position="top"/>
+      )}
       <form action={handleSubmit}>
         <button 
         disabled={isLoading}
@@ -41,7 +51,6 @@ const CartButton = ({ productId }: { productId: string }) => {
           <p className="text-center">IN CART</p>
         </button>
       </form>
-      {message && (<CartActionMessage message={message} onClose={() => setMessage(null)}/>)}
     </div>
   );
 };

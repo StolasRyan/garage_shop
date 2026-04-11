@@ -1,3 +1,4 @@
+import { Order } from "@/types/order";
 import { getDB } from "@/utils/api-routes";
 import { getServerUserId } from "@/utils/getServerUserId";
 import { ObjectId } from "mongodb";
@@ -83,6 +84,44 @@ export async function POST(request: Request) {
         })
     } catch (error) {
         console.error("Failed to create order", error);
+        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    }
+}
+
+export async function GET() {
+    try {
+        const db = await getDB();
+        const userId = await getServerUserId();
+        console.log(userId);
+        
+        if(!userId){
+            return NextResponse.json(
+                {message: 'Not autorized'},
+                {status: 401}
+            )
+        }
+
+        console.log(ObjectId.createFromHexString(userId));
+
+        const orders = await db.collection('orders')
+        .find({userId: userId})
+        .sort({createdAt: -1})
+        .toArray() as unknown as Order[];
+        console.log(orders);
+        
+        if(!orders || orders.length === 0){
+            return NextResponse.json({
+                success: true,
+                orders: []
+            })
+        };
+
+        return NextResponse.json({
+            success: true,
+            orders: orders
+        })
+    } catch (error) {
+        console.error("Failed to get orders", error);
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
     }
 }

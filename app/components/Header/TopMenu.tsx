@@ -14,10 +14,14 @@ const TopMenu = () => {
   const isFavoritePage = pathName === "/favorites";
   const isCatalog = pathName === "/catalog";
   const isCartPage = pathName === "/cart";
+  const isUsersOrderPage = pathName === "/user-orders";
+  const isAdminOrderPage = pathName === "/admin -orders";
   const { user } = useAuthStore();
   const {totalItems, fetchCart} = useCartStore();
 
   const isManagerOrAdmin = user?.role === "manager" || user?.role === "admin";
+  const ordersLink = isManagerOrAdmin ? "/admin-orders" : "/user-orders";
+  const isOerdersPage = isUsersOrderPage || isAdminOrderPage;
 
   useEffect(()=>{
     if(user && !isManagerOrAdmin){
@@ -53,11 +57,13 @@ const TopMenu = () => {
         </li>
       )}
 
-      <li className="flex flex-col items-center gap-1/2 w-11 cursor-pointer">
-        <IconBox />
-        <span className={isManagerOrAdmin ? "text-primary" : "text-gray-600"}>
+      <li >
+      <Link href={ordersLink} className="flex flex-col items-center gap-1/2 w-11 cursor-pointer">
+        <IconBox isActive={isOerdersPage}/>
+        <span className={isOerdersPage ? "text-primary" : "text-gray-600"}>
           Orders
         </span>
+        </Link>
       </li>
       {!isManagerOrAdmin && (
         <li className="relative flex flex-col items-center gap-2.5  w-11">
