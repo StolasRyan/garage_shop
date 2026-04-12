@@ -3,7 +3,6 @@ import Image from "next/image";
 import { formatPrice } from "@/utils/formatPrice";
 import StarRaiting from "./StarRaiting";
 import Link from "next/link";
-import uncknown from "../../public/images/unknown.png";
 import { CONFIG } from "@/config/config";
 import FavoriteButton from "./FavoriteButton";
 import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
@@ -24,16 +23,11 @@ const ProductCard = ({
   insufficientStock,
   orderQuantity,
   isOrderPage = false,
-}: ProductCardProps & { isOrderPage?: boolean }) => {
-  const src = img ? img : uncknown;
-
- console.log(basePrice);
- 
+  index = 0
+}: ProductCardProps & { isOrderPage?: boolean , index?: number}) => {
 
   const finalPrice =  calculateFinalPrice(basePrice, discountPercent);
-  console.log(finalPrice);
   const priceByCard = calculatePriceByCard(finalPrice, cardDiscountPercent);
-
   const showTwoPrices = !isOrderPage && discountPercent > 0 && cardDiscountPercent > 0;
 
   const displayPrice = showTwoPrices ? priceByCard : finalPrice;
@@ -41,7 +35,7 @@ const ProductCard = ({
   const productId = id;
   const mainCategory = categories?.[0];
   const productUrl = `/catalog/${encodeURIComponent(mainCategory)}/${productId}?desc=${encodeURIComponent(description.substring(0, 50))}`;
-
+  const isPriorityImage = index < 4;
   return (
     <div className="relative flex flex-col justify-between w-40 rounded-lg overflow-hidden bg-white  md:w-56 lg:w-68 h-87.25 align-top p-0 hover:shadow-article duration-300 border border-b-cyan-950 ">
       {orderQuantity && (
@@ -61,12 +55,12 @@ const ProductCard = ({
       <Link href={productUrl}>
         <div className="relative aspect-square w-40 h-40 md:w-56 xl:w-68 ">
           <Image
-            src={src}
+            src={img}
             alt="Product"
             fill
             className="object-contain"
             sizes="(max-width:768px) 160px, (max-width:1200px) 224px, 272px,"
-            priority={false}
+            priority={isPriorityImage}
           />
           {!isOrderPage && discountPercent > 0 && (
             <div className="absolute bg-amber-600 py-1 px-2 text-amber-200 bottom-2.5 left-2.5">

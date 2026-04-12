@@ -69,13 +69,15 @@ export const useOrderPricing =(
 
         const totalDiscount = totalAfterProductDiscounts - finalTotal;
 
+        const totalBonuses = Math.floor(finalTotal * CONFIG.BONUSES_PERCENT/100)
+
         return{
             totalPrice: totalAfterProductDiscounts,
             totalMaxPrice: totalAfterProductDiscounts,
             totalDiscount,
             finalPrice: finalTotal,
             maxBonusUse: 0,
-            totalBonuses: 0,
+            totalBonuses: totalBonuses,
             isMinimumReached: true
         }
     },[cartItemsForSummary]);

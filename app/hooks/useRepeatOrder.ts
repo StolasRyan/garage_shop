@@ -5,6 +5,7 @@ import { useState } from "react";
 export const useRepeatOrder = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showDeliveryButton, setShowDeliveryButton] = useState(false);
+  const [isRepeatOrderCreated, setIsRepeatOrderCreated] = useState(false);
   const [selectedDelivery, setSelectedDelivery] = useState<DeliveryData | null>(
     null,
   );
@@ -19,6 +20,7 @@ export const useRepeatOrder = () => {
     const deliveryData: DeliveryData = {
       address,
       time: { date: date.toISOString().split("T")[0], timeSlot },
+      isValid: false
     };
     setSelectedDelivery(deliveryData);
     setShowDatePicker(false);
@@ -30,6 +32,17 @@ export const useRepeatOrder = () => {
     setShowDeliveryButton(false);
   };
 
+  const handleEditDelivery = () => {
+    setShowDatePicker(true);
+  };
+
+  const handleRepeatOrderSuccess = () =>{
+    setIsRepeatOrderCreated(true);
+    setSelectedDelivery(null);
+    setShowDeliveryButton(false);
+    
+  }
+
   return {
     showDatePicker,
     handleOrderClick,
@@ -37,6 +50,11 @@ export const useRepeatOrder = () => {
     showDeliveryButton,
     handleDateSelect,
     selectedDelivery,
-    handleCancelDelivery
+    setSelectedDelivery,
+    handleCancelDelivery,
+    isRepeatOrderCreated,
+    setIsRepeatOrderCreated,
+    handleEditDelivery,
+    handleRepeatOrderSuccess
   };
 };

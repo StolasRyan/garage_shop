@@ -2,7 +2,6 @@ import { CONFIG } from "@/config/config";
 import { useCartStore } from "@/store/cartStore";
 import { getBonusesWord } from "@/utils/bonusWord";
 import { CreditCard, ShoppingBag } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 
 interface OrderSuccessMessageProps {
@@ -10,7 +9,6 @@ interface OrderSuccessMessageProps {
 }
 
 const OrderSuccessMessage = ({orderNumber}: OrderSuccessMessageProps) => {
-    const router = useRouter();
     const {pricing, useBonuses, setIsOrdered} = useCartStore();
     const {totalBonuses,maxBonusUse,totalPrice}=pricing;
 
@@ -20,7 +18,7 @@ const OrderSuccessMessage = ({orderNumber}: OrderSuccessMessageProps) => {
 
     const handleNewOrder = () => {
         setIsOrdered(false);
-        router.replace('/')
+        window.location.reload();
     }
   return (
     <div className="text-center p-4 bg-purple-100 text-purple-600 rounde border border-primary">
@@ -47,7 +45,7 @@ const OrderSuccessMessage = ({orderNumber}: OrderSuccessMessageProps) => {
         onClick={handleNewOrder}
         className={`${baseStyles} bg-primary hover:shadow-button-default active:shadow-button-active text-white cursor-pointer duration-300 flex items-center justify-center gap-2`}
         >
-         <ShoppingBag size={16}/>   Back to shop
+         <ShoppingBag size={16}/>   Reload page
         </button>
     </div>
   )

@@ -1,3 +1,5 @@
+import { CustomCartItem, CustomPricing, DeliveryData } from "./cart";
+import { Order } from "./order";
 
 
 export interface ProductsData {
@@ -37,4 +39,20 @@ export interface PriceComparison {
         originalHasLoyalty: boolean;
         currentHasLoyalty: boolean;
     }>
+}
+
+export interface RepeatOrderSectionProps {
+  isRepeatOrderCreated: boolean;
+  selectedDelivery: DeliveryData | null;
+  canCreateRepeatOrder: boolean;
+  order: Order;
+  priceComparison: PriceComparison | null;
+  showPriceWarnings: boolean;
+  onClosePriceWarning: () => void;
+  deliveryData: DeliveryData | null;
+  onEditDelivery: () => void;
+  productsData: ProductsData;
+  cartItemsForSummary: CustomCartItem[];
+  customPricing: CustomPricing;
+  onOrderSuccess?: () => void;
 }

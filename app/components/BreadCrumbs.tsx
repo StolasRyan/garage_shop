@@ -4,10 +4,11 @@ import { HomeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import MiniLoader from "./Header/MiniLoader";
 
 
-
-const BreadCrumbs = () => {
+function BreadCrumbsContent(){
   const pathName = usePathname();
   const searchParams = useSearchParams()
 
@@ -73,6 +74,14 @@ const BreadCrumbs = () => {
       </ol>
     </nav>
   );
+}
+
+const BreadCrumbs = () => {
+  return (
+    <Suspense fallback={<MiniLoader/>}>
+      <BreadCrumbsContent />
+    </Suspense>
+  )
 };
 
 export default BreadCrumbs;

@@ -13,21 +13,30 @@ import { useOrderProductsData } from "@/app/hooks/useOrderProductsData";
 import { usePriceComparsion } from "@/app/hooks/usePriceComparsion";
 import { useOrderPricing } from "@/app/hooks/useOrderPricing";
 import StockWarningsAlert from "./StockWarningsAlert";
+import RepeatOrderSection from "./RepeatOrderSection";
+import RepeatOrderSuccessAlert from "./RepeatOrderSuccessAlert";
 
 const OrderCard = ({ order }: { order: Order }) => {
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [showPriceWarnings, setShowPriceWarnings] = useState(false);
 
-  const {productsData: fetchedRoductsData, loading: productsDataLoading} = useOrderProductsData(order);
+  const { productsData: fetchedRoductsData, loading: productsDataLoading } =
+    useOrderProductsData(order);
 
-    const {
-    orderProducts, 
-    stockWarnings,
-  } = useOrderProducts(order, fetchedRoductsData);
+  const { orderProducts, stockWarnings } = useOrderProducts(
+    order,
+    fetchedRoductsData,
+  );
 
-  const {currentProducts, priceComparison} = usePriceComparsion(order, fetchedRoductsData);
+  const { currentProducts, priceComparison } = usePriceComparsion(
+    order,
+    fetchedRoductsData,
+  );
 
-  const {cartItemsForSummary, productsData, customPricing} = useOrderPricing(order, currentProducts);
+  const { cartItemsForSummary, productsData, customPricing } = useOrderPricing(
+    order,
+    currentProducts,
+  );
 
   const {
     showDatePicker,
@@ -36,22 +45,26 @@ const OrderCard = ({ order }: { order: Order }) => {
     handleDeliveryClick,
     handleDateSelect,
     handleCancelDelivery,
+    isRepeatOrderCreated,
+    selectedDelivery,
+    handleEditDelivery,
+    handleRepeatOrderSuccess
   } = useRepeatOrder();
-
-
 
   const { deliverySchedule } = useDeliveryData();
 
-  const hasStockIssues = orderProducts.some((product)=> product.isLowStock || product.insufficientStock);
+  const hasStockIssues = orderProducts.some(
+    (product) => product.isLowStock || product.insufficientStock,
+  );
   const canCreateRepeatOrder = !hasStockIssues;
   const applyIndexStyles = !showOrderDetails;
 
-  useEffect(()=>{
-    if(priceComparison?.hasChanges){
+  useEffect(() => {
+    if (priceComparison?.hasChanges) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowPriceWarnings(true);
     }
-  },[priceComparison?.hasChanges])
+  }, [priceComparison?.hasChanges]);
 
   if (productsDataLoading) return <MiniLoader />;
   return (
@@ -68,7 +81,26 @@ const OrderCard = ({ order }: { order: Order }) => {
         applyIndexStyles={applyIndexStyles}
         isOrderPage={true}
       />
-      <StockWarningsAlert warnings={stockWarnings} hasStockIssues={hasStockIssues} /> 
+      <RepeatOrderSection
+        isRepeatOrderCreated={isRepeatOrderCreated}
+        selectedDelivery={selectedDelivery}
+        canCreateRepeatOrder={canCreateRepeatOrder}
+        order={order}
+        priceComparison={priceComparison}
+        showPriceWarnings={showPriceWarnings}
+        onClosePriceWarning={() => setShowPriceWarnings(false)}
+        deliveryData={selectedDelivery}
+        onEditDelivery={handleEditDelivery}
+        productsData={productsData}
+        cartItemsForSummary={cartItemsForSummary}
+        customPricing={customPricing}
+        onOrderSuccess={handleRepeatOrderSuccess}
+      />
+      <StockWarningsAlert
+        warnings={stockWarnings}
+        hasStockIssues={hasStockIssues}
+      />
+      {isRepeatOrderCreated && <RepeatOrderSuccessAlert/>}
       <OrderActions
         showOrderDetails={showOrderDetails}
         onToogleDetails={() => setShowOrderDetails(!showOrderDetails)}
