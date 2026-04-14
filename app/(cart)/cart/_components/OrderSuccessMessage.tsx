@@ -2,6 +2,7 @@ import { CONFIG } from "@/config/config";
 import { useCartStore } from "@/store/cartStore";
 import { getBonusesWord } from "@/utils/bonusWord";
 import { CreditCard, ShoppingBag } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 interface OrderSuccessMessageProps {
@@ -9,16 +10,17 @@ interface OrderSuccessMessageProps {
 }
 
 const OrderSuccessMessage = ({orderNumber}: OrderSuccessMessageProps) => {
-    const {pricing, useBonuses, setIsOrdered} = useCartStore();
+    const {pricing, useBonuses, resetAfterOrder} = useCartStore();
     const {totalBonuses,maxBonusUse,totalPrice}=pricing;
+    const router = useRouter();
 
     const usedBonuses = Math.min(maxBonusUse, Math.floor((totalPrice * CONFIG.MAX_BOUSES_PERCENT) / 100));
 
     const baseStyles = "h-10 rounded w-full text-base justify-center items-center duration-300";
 
-    const handleNewOrder = () => {
-        setIsOrdered(false);
-        window.location.reload();
+    const handleToOrder = () => {
+        resetAfterOrder();
+        router.push('/user-orders');
     }
   return (
     <div className="text-center p-4 bg-purple-100 text-purple-600 rounde border border-primary">
@@ -42,10 +44,10 @@ const OrderSuccessMessage = ({orderNumber}: OrderSuccessMessageProps) => {
                 After delivery you will receive {totalBonuses} {getBonusesWord(totalBonuses)}.
         </div>
         <button
-        onClick={handleNewOrder}
+        onClick={handleToOrder}
         className={`${baseStyles} bg-primary hover:shadow-button-default active:shadow-button-active text-white cursor-pointer duration-300 flex items-center justify-center gap-2`}
         >
-         <ShoppingBag size={16}/>   Reload page
+         <ShoppingBag size={16}/>   To orders
         </button>
     </div>
   )

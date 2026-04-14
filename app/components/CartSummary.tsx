@@ -8,8 +8,9 @@ import CheckoutButton from "../(cart)/cart/_components/CheckoutButton";
 import PaymentButtons from "../(cart)/cart/_components/PaymentButtons";
 import { FakePaymentData, PaymentSuccessData } from "@/types/payment";
 import {
-  confirmOrderPayment,
+  clearUserCart,
   createOrderRequest,
+  markPaymentAsFailed,
   prepareCartItemsWithPrices,
   updateUserAfterPayment,
 } from "../(cart)/cart/utils/orderHelpers";
@@ -135,11 +136,11 @@ const CartSummary = ({
 
       if (paymentMethod === "online") {
         if (paymentData?.status === "succeeded") {
-          await confirmOrderPayment(currentOrderId!);
           await updateUserAfterPayment({
+            orderId: currentOrderId!,
             usedBonuses: actualUsedBonuses,
             earnedBonuses: totalBonuses,
-            purchasedProductIds: visibleCartItems.map((item) => item.productId),
+            purchasedProductsIds: visibleCartItems.map((item) => item.productId),
           });
         }
         //   try {
@@ -163,9 +164,14 @@ const CartSummary = ({
         };
         setSuccessData(successModalData);
         setShowSuccessModal(true);
+        setIsOrdered(true);
+
+        await clearUserCart();
       } else {
         const result = await createOrder(paymentMethod, paymentData?.id);
+        await clearUserCart();
         setOrderNumber(result.orderNumber);
+        setIsOrdered(true);
       }
 
       setIsOrdered(true);
@@ -216,9 +222,17 @@ const CartSummary = ({
     }
   };
 
-  const handlePaymentError = (error: string) => {
+  const handlePaymentError = async(error: string) => {
     setShowPaymentModal(false);
+    if(currentOrderId){
+      await markPaymentAsFailed(currentOrderId);
+    }else{
+      console.error(`Payment error, orderId not found for marking as failed: ${error}`);
+    }
     alert(`Payment error: ${error}`);
+    resetAfterOrder();
+    await clearUserCart();
+    router.push("/user-orders");
   };
 
   const handleCloseSuccessModal = () => {

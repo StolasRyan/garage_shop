@@ -72,10 +72,10 @@ const FakePaymentModal = ({
           });
           break;
         case "failure":
-          onError("Not enough funds");
+          onError("Not enough funds. Try again later on 'Orders' page.");
           break;
         case "error":
-          onError("Banks emitet error. Try again later");
+          onError("Banks emitet error. Try again later on 'Orders' page.");
           break;
       }
     } catch (error) {

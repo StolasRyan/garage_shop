@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import BreadCrumbs from "./components/BreadCrumbs";
 import { RegFormProvider } from "./contexts/RegFormContext";
 import StatesProvider from "@/store/StatesProvider";
+import StoreProvider from "./provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <StoreProvider>
         <StatesProvider>
         <RegFormProvider>
           <Header />
@@ -41,6 +43,7 @@ export default function RootLayout({
           <Footer />
         </RegFormProvider>
         </StatesProvider>
+        </StoreProvider>
       </body>
     </html>
   );

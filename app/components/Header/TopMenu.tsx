@@ -10,20 +10,22 @@ import { useCartStore } from "@/store/cartStore";
 import { useEffect } from "react";
 
 const TopMenu = () => {
+
+  const { user } = useAuthStore();
+  const {totalItems, fetchCart} = useCartStore();
   const pathName = usePathname();
+
   const isFavoritePage = pathName === "/favorites";
   const isCatalog = pathName === "/catalog";
   const isCartPage = pathName === "/cart";
   const isUsersOrderPage = pathName === "/user-orders";
-  const isAdminOrderPage = pathName === "/admin -orders";
-  const { user } = useAuthStore();
-  const {totalItems, fetchCart} = useCartStore();
+  const isAdminOrderPage = pathName === "/administrator/admin-orders";
 
   const isManagerOrAdmin = user?.role === "manager" || user?.role === "admin";
-  const ordersLink = isManagerOrAdmin ? "/admin-orders" : "/user-orders";
-  const isOerdersPage = isUsersOrderPage || isAdminOrderPage;
+  const ordersLink = isManagerOrAdmin ? "/administrator/admin-orders" : "/user-orders";
+  const isOrdersPage = isUsersOrderPage || isAdminOrderPage;
 
-  useEffect(()=>{
+  useEffect(()=>{ 
     if(user && !isManagerOrAdmin){
       fetchCart();
     }
@@ -59,8 +61,8 @@ const TopMenu = () => {
 
       <li >
       <Link href={ordersLink} className="flex flex-col items-center gap-1/2 w-11 cursor-pointer">
-        <IconBox isActive={isOerdersPage}/>
-        <span className={isOerdersPage ? "text-primary" : "text-gray-600"}>
+        <IconBox isActive={isOrdersPage}/>
+        <span className={isOrdersPage ? "text-primary" : "text-gray-600"}>
           Orders
         </span>
         </Link>

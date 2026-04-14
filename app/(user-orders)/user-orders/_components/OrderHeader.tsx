@@ -18,9 +18,9 @@ const OrderHeader = ({
         <p className="font-bold">{formatOrderDate(order.deliveryDate)}</p>
         <p className="font-bold hidden lg:block">{order.deliveryTimeSlot}</p>
         <span
-          className={`px-2 py-1 rounded text-xs md:text-base shrink-0 ${getStatusColor(order.status)}`}
+          className={`px-2 py-1 rounded text-xs md:text-base shrink-0 ${getStatusColor(order)}`}
         >
-          {getStatusText(order.status)}
+          {getStatusText(order)}
         </span>
       </div>
       <div className="flex flex-col md:flex-row gap-2 lg:gap-6 items-center">
