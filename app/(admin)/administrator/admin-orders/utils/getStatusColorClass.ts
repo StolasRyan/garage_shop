@@ -9,7 +9,7 @@ export const getStatusColorClass = (
     case "Collected":
       return isSelected ? "bg-primary" : "text-primary";
     case "Confirmed":
-      return isSelected ? "bg-[#008c49]" : "text-[#008c49]";
+      return isSelected ? "bg-lime-500" : "text-lime-500";
     case "Not Confirmed":
       return isSelected ? "bg-[#fca21c]" : "text-[#fca21c]";
     case "Refund":

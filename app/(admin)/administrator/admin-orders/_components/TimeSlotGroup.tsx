@@ -1,24 +1,32 @@
 import { Order } from "@/types/order";
 import { Check, Clock } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getUniqueCities } from "../utils/getUniqueCities";
 import CityFilterButtons from "./CityFilterButtons";
 import AdminOrderCard from "./AdminOrderCard";
+import { useGetAdminOrdersQuery } from "@/store/redux/api/ordersApi";
 
 interface TimeSlotGroupProps {
-  slotOrders: Order[];
+  orderIds: string[];
   timeSlot: string;
 }
 
-const TimeSlotGroup = ({ slotOrders, timeSlot }: TimeSlotGroupProps) => {
+const TimeSlotGroup = ({ orderIds, timeSlot }: TimeSlotGroupProps) => {
+  const { data } = useGetAdminOrdersQuery();
   const [selectedCity, setSelectedCity] = useState<string>("All cities");
-  const [localOrders, setLocalOrders] = useState<Order[]>(slotOrders);
+  const [localOrders, setLocalOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    setLocalOrders(slotOrders);
-  }, [slotOrders]);
+    if(data?.orders){
+      const filteredOrders = data.orders.filter(
+        (order)=>orderIds.includes(order._id)
+      );
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setLocalOrders(filteredOrders);
+    }
+  }, [data?.orders, orderIds]);
 
-  const cities = getUniqueCities(slotOrders);
+  const cities = getUniqueCities(localOrders);
 
   const filteredSlotOrders =
     selectedCity === "All cities"
@@ -74,14 +82,14 @@ const TimeSlotGroup = ({ slotOrders, timeSlot }: TimeSlotGroupProps) => {
       {cities.length > 1 && (
         <CityFilterButtons
           cities={cities}
-          slotOrders={slotOrders}
+          slotOrders={localOrders}
           selectedCity={selectedCity}
-          onCitySelect={handleCitySelect}
+          onCitySelect={handleCitySelect} 
         />
       )}
       <div className="flex flex-col gap-y-15">
         {filteredSlotOrders.map((order)=>(
-            <AdminOrderCard key={order._id} order={order} onStatusUpdate={handleOrderStatusUpdate}/>
+            <AdminOrderCard key={order._id} orderId={order._id} />
         ))}
       </div>
     </div>

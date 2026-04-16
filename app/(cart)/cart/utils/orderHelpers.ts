@@ -78,54 +78,52 @@ export const updateUserAfterPayment = async (data: {
   }
 };
 
-export const clearUserCart = async (): Promise<void> =>{
-  try{
+export const clearUserCart = async (): Promise<void> => {
+  try {
     const response = await fetch("/api/orders/clear-cart", {
-      method: "POST"
-    })
+      method: "POST",
+    });
 
-    if(!response.ok){
+    if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed while clearing cart")
+      throw new Error(errorData.message || "Failed while clearing cart");
     }
 
     const result = await response.json();
 
-    if(!result.success){
-      throw new Error(result.message || "Failed to clear cart")
+    if (!result.success) {
+      throw new Error(result.message || "Failed to clear cart");
     }
-
-  }catch(e){
+  } catch (e) {
     console.error("Failed to clear cart", e);
-    throw e
+    throw e;
   }
 };
 
 export const updateOrderStatus = async (
   orderId: string,
-  updates:{status?:string, paymentStatus?:string}
-)=>{
+  updates: { status?: string; paymentStatus?: string },
+) => {
   try {
     const response = await fetch(`/api/orders/update-status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({orderId, ...updates})
-    })
-    if(!response.ok){
+      body: JSON.stringify({ orderId, ...updates }),
+    });
+    if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to update order status")
+      throw new Error(errorData.message || "Failed to update order status");
     }
     return await response.json();
   } catch (error) {
     console.error("Failed to update order status", error);
-    throw error
+    throw error;
   }
 };
 
-export const markPaymentAsFailed =async(orderId:string)=>{
-  return await updateOrderStatus(orderId, {paymentStatus:"failed"})
+export const markPaymentAsFailed = async (orderId: string) => {
+  return await updateOrderStatus(orderId, {
+    status: "pending",
+    paymentStatus: "failed",
+  });
 };
-
-export const confirmedOrderPayment = async(orderId:string)=>{
-  return await updateOrderStatus(orderId, {status:"confirmed", paymentStatus:"paid"})
-}

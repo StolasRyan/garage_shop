@@ -6,7 +6,7 @@ export const getMappedStatus = (order: Order): string => {
   if (order.paymentMethod === "online") {
     if (order.paymentStatus === "paid" && order.status === "confirmed") {
       return "Confirmed";
-    } else if (order.paymentStatus === "failed") {
+    } else if (order.paymentStatus === "failed" && order.status === "cancelled") {
       return "Not Confirmed";
     } else if (order.paymentStatus === "waiting" && order.status === "pending") {
       return "New";
@@ -15,7 +15,7 @@ export const getMappedStatus = (order: Order): string => {
  
   if (order.paymentMethod === "cash_on_delivery") {
     if (order.status === "pending" && order.paymentStatus === "pending") {
-      return "Delivering";
+      return "New";
     } else if (order.status === "confirmed") {
       return "Confirmed";
     }

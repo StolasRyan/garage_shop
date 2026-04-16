@@ -7,19 +7,15 @@ export const getEnglishStatuses = (russianStatus: string, order: Order): { statu
       case "Confirmed":
         return { status: "confirmed", paymentStatus: "paid" };
       case "Not Confirmed":
-        return { status: "pending", paymentStatus: "failed" };
+        return { status: "cancelled", paymentStatus: "failed" };
       case "New":
         return { status: "pending", paymentStatus: "waiting" }; 
-      case "Not Payed":
-        return { status: "pending", paymentStatus: "failed" };
     }
   }
 
   // Для оплаты при доставке
   if (order.paymentMethod === "cash_on_delivery") {
     switch (russianStatus) {
-      case "Delivering":
-        return { status: "pending", paymentStatus: "pending" }; 
       case "Confirmed":
         return { status: "confirmed", paymentStatus: "pending" };
       case "New":
@@ -29,14 +25,15 @@ export const getEnglishStatuses = (russianStatus: string, order: Order): { statu
 
   // Базовые статусы (не влияют на paymentStatus)
   const statusMap: { [key: string]: string } = {
-    "In process": "pending",
-    "Refund": "refund", 
-    "Returned": "returned",
+    "New": "pending",
     "Collected": "collected",
     "Delivering": "delivering",
     "Confirmed": "confirmed",
+    'Not Confirmed': 'cancelled',
+    "Refund": "refund", 
+    "Returned": "returned",
     "Delivered": "delivered",
-    "Cancelled": "cancelled",
+    // "Cancelled": "cancelled",
   };
 
   return { status: statusMap[russianStatus] || "pending" };

@@ -2,63 +2,49 @@
 
 import ErrorComponent from "@/app/components/ErrorComponent";
 import { Loader } from "@/app/components/Loader";
-import { Order } from "@/types/order";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AdminOrdersHeader from "./_components/AdminOrdersHeader";
 import { getThreeDaysDates } from "../delivery-times/utils/getThreeDaysDates";
 import DateSelector from "./_components/DateSelector";
 import TimeSlotSection from "./_components/TimeSlotSection";
+import { useGetAdminOrdersQuery } from "@/store/redux/api/ordersApi";
+import { Order } from "@/types/order";
 
-interface OrderStats {
-  nextThreeDaysOrders: number;
-}
 
-const AdminOrderPage = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+const AdminOrderPage = () => { 
   const [selectedDate, setSelectedDate] = useState<string>("");
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [customDate, setCustomDate] = useState<Date | undefined>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [stats, setStats] = useState<OrderStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<{
-    error: Error;
-    userMessage: string;
-  } | null>(null);
 
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch("/api/admin/users/orders");
-      if (!response.ok) {
-        throw new Error("Failed to fetch orders");
-      }
-      const data = await response.json();
-      setOrders(data.orders);
-      setStats(data.stats);
 
-      const threeDaysDates = getThreeDaysDates();
-      const today = threeDaysDates[0];
-      setSelectedDate(today);
+  const {data, isLoading, error: queryError} = useGetAdminOrdersQuery(undefined,{
+    pollingInterval: 5000,
+    refetchOnFocus: true,
+    refetchOnReconnect: true
+  });
+  
+const orders = useMemo(()=>data?.orders || [], [data?.orders]);
+const stats = useMemo(()=>data?.stats || null,[data?.stats]);
+const threeDaysDates = getThreeDaysDates();
 
-      const todayOrders = data.orders.filter(
-        (order: Order) => order.deliveryDate === today,
-      );
-      setFilteredOrders(todayOrders);
-    } catch (error) {
-      setError({
-        error: error instanceof Error ? error : new Error("Unknown error"),
-        userMessage: "Failed to fetch orders",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+useEffect(()=>{
+  if(orders.length > 0 && !selectedDate){
+    const today = getThreeDaysDates()[0];
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedDate(today)
+  }
+},[orders, selectedDate])
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+useEffect(()=>{
+  console.log()
+},[])
 
-  const threeDaysDates = getThreeDaysDates();
+const filteredOrdersIds = useMemo(()=>{
+  if(orders.length === 0) return [];
+  const targetDate = selectedDate || getThreeDaysDates()[0];
+  return orders.filter((order: Order) => order.deliveryDate === targetDate).map((order: Order) => order._id);
+},[orders, selectedDate])
+  
 
   const toggleCalendar = () =>{
     setIsCalendarOpen(!isCalendarOpen);
@@ -72,10 +58,7 @@ const AdminOrderPage = () => {
       const day = String(date.getDate()).padStart(2, "0");
       const formattedDate = `${year}-${month}-${day}`;
       setSelectedDate(formattedDate);
-      const filteredOrders = orders.filter(
-        (order: Order) => order.deliveryDate === formattedDate,
-      );
-      setFilteredOrders(filteredOrders);
+    
       setIsCalendarOpen(false);
     }
   };
@@ -84,17 +67,14 @@ const AdminOrderPage = () => {
     setSelectedDate(date);
     setCustomDate(undefined);
     setIsCalendarOpen(false);
-    const filteredOrders = orders.filter(
-      (order: Order) => order.deliveryDate === date,
-    );
-    setFilteredOrders(filteredOrders);
+   
   }
 
-  if (loading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  if (error)
+  if (queryError)
     return (
-      <ErrorComponent error={error.error} userMessage={error.userMessage} />
+      <ErrorComponent error={queryError instanceof Error ? queryError : new Error("Unknown error")} userMessage={'Failed to load users orders'} />
     );
   return (
     <div className="px-[max(12px,calc((100%-1208px)/2))] mx-auto mb-8 py-8">
@@ -109,7 +89,7 @@ const AdminOrderPage = () => {
         toggleCalendar={toggleCalendar}
         onCalendarDateSelect={handleDateSelect}
       />
-      <TimeSlotSection filteredOrders={filteredOrders} />
+      <TimeSlotSection orderIds={filteredOrdersIds} />
     </div>
   );
 };

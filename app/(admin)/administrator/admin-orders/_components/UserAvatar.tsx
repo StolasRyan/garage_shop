@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 
 interface UserAvatarProps {
-    userId: string
-    gender: string
-    name: string
+    userId: string | undefined
+    gender: string | undefined
+    name: string | undefined
 }
 
 const UserAvatar = ({userId, gender, name}:UserAvatarProps) => {

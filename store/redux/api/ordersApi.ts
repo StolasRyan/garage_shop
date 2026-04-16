@@ -9,7 +9,7 @@ export const ordersApi = createApi({
     tagTypes: ['Orders'],
     endpoints: (builder) => ({
         getAdminOrders: builder.query<OrdersResponse, void>({
-            query: () => 'orders/admin-orders',
+            query: () => 'admin/users/orders/',
             providesTags: ['Orders']
         })
     })
