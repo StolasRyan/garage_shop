@@ -2,7 +2,7 @@ import { Schedule } from "@/types/deliverySchedule";
 import { useEffect, useState } from "react";
 import { getAvailableDates } from "../utils/getAvailableDates";
 import { AvailableDate } from "@/types/availableDate";
-import { getAvailableTimeSlots } from "../utils/getAvailableTimeSlots";
+import { getAvailableTimeSlots } from "../../../../utils/getAvailableTimeSlots";
 import { formatDateFull, formatDateNumeric } from "@/app/(admin)/administrator/delivery-times/utils/dateFormatters";
 import { formatDisplayDate } from "../utils/formatDisplayDate";
 import { formatTimeSlot } from "@/app/(cart)/cart/utils/formaTimeSlot";

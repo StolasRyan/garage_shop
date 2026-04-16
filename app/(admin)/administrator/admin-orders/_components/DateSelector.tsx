@@ -2,6 +2,7 @@ import { Order } from "@/types/order";
 import DateFilterButtons from "./DateFilterButtons";
 import Calendar from "./Calendar";
 import { CalendarIcon } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 
 interface DateSelectorProps {
   customDate: Date | undefined;
@@ -14,7 +15,8 @@ interface DateSelectorProps {
   onCalendarDateSelect: (date: Date | undefined) => void;
 }
 
-const DateSelector = ({
+
+const DateSelector = memo(({
   customDate,
   selectedDate,
   dates,
@@ -24,6 +26,25 @@ const DateSelector = ({
   toggleCalendar,
   onCalendarDateSelect,
 }: DateSelectorProps) => {
+  
+  const [calendarMonth, setCalendarMonth] = useState<Date | undefined>(customDate || new Date());
+
+  useEffect(()=>{
+    if(customDate){
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCalendarMonth(customDate)
+    }
+  },[customDate]);
+
+
+  const handleDateSelect = (date: Date | undefined) => {
+    onCalendarDateSelect(date);
+    if(date){
+      setCalendarMonth(date);
+    }
+  }
+
+
   return (
     <div className="flex justify-start items-center gap-3 relative mb-15">
       <button
@@ -37,8 +58,8 @@ const DateSelector = ({
       {isCalendarOpen && (
           <Calendar
           customDate={customDate}
-          onDateSelect={onCalendarDateSelect}
-          onMonthChange={onCalendarDateSelect}
+          onDateSelect={handleDateSelect}
+          month={calendarMonth}
           />
       )}
       <DateFilterButtons
@@ -49,6 +70,6 @@ const DateSelector = ({
       />
     </div>
   );
-};
-
+});
+DateSelector.displayName = "DateSelector";
 export default DateSelector;

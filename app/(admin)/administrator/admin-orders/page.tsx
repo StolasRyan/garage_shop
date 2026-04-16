@@ -2,7 +2,7 @@
 
 import ErrorComponent from "@/app/components/ErrorComponent";
 import { Loader } from "@/app/components/Loader";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AdminOrdersHeader from "./_components/AdminOrdersHeader";
 import { getThreeDaysDates } from "../delivery-times/utils/getThreeDaysDates";
 import DateSelector from "./_components/DateSelector";
@@ -25,7 +25,7 @@ const AdminOrderPage = () => {
   
 const orders = useMemo(()=>data?.orders || [], [data?.orders]);
 const stats = useMemo(()=>data?.stats || null,[data?.stats]);
-const threeDaysDates = getThreeDaysDates();
+const threeDaysDates = useMemo(()=>getThreeDaysDates(),[]);
 
 useEffect(()=>{
   if(orders.length > 0 && !selectedDate){
@@ -35,9 +35,7 @@ useEffect(()=>{
   }
 },[orders, selectedDate])
 
-useEffect(()=>{
-  console.log()
-},[])
+
 
 const filteredOrdersIds = useMemo(()=>{
   if(orders.length === 0) return [];
@@ -46,11 +44,11 @@ const filteredOrdersIds = useMemo(()=>{
 },[orders, selectedDate])
   
 
-  const toggleCalendar = () =>{
+  const toggleCalendar = useCallback(() =>{
     setIsCalendarOpen(!isCalendarOpen);
-  }
+  },[isCalendarOpen])
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleDateSelect = useCallback((date: Date | undefined) => {
     setCustomDate(date);
     if (date) {
       const year = date.getFullYear();
@@ -58,17 +56,16 @@ const filteredOrdersIds = useMemo(()=>{
       const day = String(date.getDate()).padStart(2, "0");
       const formattedDate = `${year}-${month}-${day}`;
       setSelectedDate(formattedDate);
-    
-      setIsCalendarOpen(false);
     }
-  };
+     setIsCalendarOpen(false);
+  },[]);
 
-  const filterOrdersByDate = (date: string)=>{
+  const filterOrdersByDate = useCallback((date: string)=>{
     setSelectedDate(date);
     setCustomDate(undefined);
     setIsCalendarOpen(false);
    
-  }
+  },[])
 
   if (isLoading) return <Loader />;
 

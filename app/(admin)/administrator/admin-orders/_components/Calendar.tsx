@@ -1,18 +1,22 @@
 import { ArrowLeftSquare, ArrowRightSquare } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import "../daypicker.css";
+import { useEffect, useState } from "react";
 
 interface CalendarProps {
   customDate: Date | undefined;
   onDateSelect: (date: Date | undefined) => void;
-  onMonthChange: (date: Date | undefined) => void;
+  month?: Date;
+  isOrderDateChange?: boolean
 }
 
 const Calendar = ({
   customDate,
   onDateSelect,
-  onMonthChange,
+  month,
+  isOrderDateChange = false
 }: CalendarProps) => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(month || customDate || new Date());
   const getMonthName = (date: Date) => {
     const monthName = date.toLocaleDateString("en-GB", { month: "long" });
     const capitalizedMonthName =
@@ -22,21 +26,28 @@ const Calendar = ({
   };
 
   const handlePreviousMonth = () => {
-    const newDate = new Date(customDate || new Date());
+    const newDate = new Date(currentMonth);
     newDate.setMonth(newDate.getMonth() - 1);
-    onMonthChange(newDate);
+    setCurrentMonth(newDate);
   };
 
   const handleNextMonth = () => {
-    const newDate = new Date(customDate || new Date());
+    const newDate = new Date(currentMonth);
     newDate.setMonth(newDate.getMonth() + 1);
-    onMonthChange(newDate);
+    setCurrentMonth(newDate);
   };
+
+  useEffect(()=>{
+    if(month){
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCurrentMonth(month);
+    }
+  },[month])
   return (
-    <div className="absolute top-17 left-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-80">
+    <div className={`${isOrderDateChange ? '' : 'absolute top-17 left-0 z-50 bg-white norder border-gray-200 rounded-lg shadow-lg p-4 w-92'}`}>
       <div className="flex justify-between items-center mb-4">
         <span className="text-lg font-bold text-gray-600">
-          {customDate ? getMonthName(customDate) : "Select month"}
+          {getMonthName(currentMonth)}
         </span>
         <div className="flex gap-x-4 justify-center">
           <button
@@ -53,11 +64,14 @@ const Calendar = ({
           </button>
         </div>
       </div>
-      <DayPicker
+      <div className="full-width-calendar">
+        <DayPicker
         mode="single"
         selected={customDate}
         onSelect={onDateSelect}
         // locale={}
+        month={currentMonth}
+        onMonthChange={setCurrentMonth}
         showOutsideDays={true}
         className="p-0"
         classNames={{
@@ -88,6 +102,7 @@ const Calendar = ({
           },
         }}
       />
+      </div>
     </div>
   );
 };

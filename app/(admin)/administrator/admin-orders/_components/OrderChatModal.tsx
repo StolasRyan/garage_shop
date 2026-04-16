@@ -3,7 +3,6 @@ import {
   ChatMessage,
   useGetOrderMessagesQuery,
 } from "@/store/redux/api/chatApi";
-import { ms } from "better-auth/plugins";
 import { XCircle } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { getRoleDisplayName } from "../utils/getRoleDisplayName";

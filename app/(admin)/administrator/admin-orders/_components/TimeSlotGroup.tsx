@@ -48,18 +48,18 @@ const TimeSlotGroup = ({ orderIds, timeSlot }: TimeSlotGroupProps) => {
       setSelectedCity(city);
   }
 
-  const handleOrderStatusUpdate = (orderId: string, newStatus: string)=>{
-    setLocalOrders((prev)=> prev.map((order)=>{
-        if(order._id === orderId){
-            const updatedOrder:Order = {
-                ...order,
-                status: newStatus as Order['status']
-            }
-            return updatedOrder; 
-        }
-        return order;
-    }))
-  }
+  // const handleOrderStatusUpdate = (orderId: string, newStatus: string)=>{
+  //   setLocalOrders((prev)=> prev.map((order)=>{
+  //       if(order._id === orderId){
+  //           const updatedOrder:Order = {
+  //               ...order,
+  //               status: newStatus as Order['status']
+  //           }
+  //           return updatedOrder; 
+  //       }
+  //       return order;
+  //   }))
+  // }
 
 
 
