@@ -5,6 +5,8 @@ import ProductsSection from "./ProductsSection";
 import { CONFIG } from "@/config/config";
 
 interface SalesPros{
+
+  randomLimit?: number;
   mobileItemsLimit?: number
 }
 

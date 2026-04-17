@@ -7,6 +7,7 @@ import BreadCrumbs from "./components/BreadCrumbs";
 import { RegFormProvider } from "./contexts/RegFormContext";
 import StatesProvider from "@/store/StatesProvider";
 import StoreProvider from "./provider";
+import { ProductProvider } from "./contexts/ProductContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,10 +38,12 @@ export default function RootLayout({
         <StoreProvider>
         <StatesProvider>
         <RegFormProvider>
+          <ProductProvider>
           <Header />
           <BreadCrumbs />
           {children}
           <Footer />
+          </ProductProvider>
         </RegFormProvider>
         </StatesProvider>
         </StoreProvider>

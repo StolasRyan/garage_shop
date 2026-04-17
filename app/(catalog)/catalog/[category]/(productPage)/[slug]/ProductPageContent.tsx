@@ -16,6 +16,7 @@ import ReviewsWrapper from "./_components/ReviewsWrapper";
 import Sales from "@/app/(products)/Sales";
 import FavoriteButton from "@/app/components/FavoriteButton";
 import { calculateFinalPrice, calculatePriceByCard } from "@/utils/calcPrices";
+import ProductTitle from "./_components/ProductTitle";
 
 interface ProductPageContentProps {
   product: ProductCardProps;
@@ -33,7 +34,7 @@ const ProductPageContent = ({
 
   return (
     <div className="px-[max(12px,calc((100%-1208px)/2))] md:px-[max(16px, calc((100%-1208px)/2))] text-gray-600">
-      <h1 className="text-xl md:text-2xl font-bold mb-4">{product.description}</h1>
+      <ProductTitle title={product.title} description={product.description}/>
       <div className="flex flex-row flex-wrap items-center gap-6 mb-4 md:mb-6">
         <div className="text-xs">sku:{product.sku}</div>
         <div className="flex flex-row flex-wrap items-center gap-2">
@@ -86,7 +87,7 @@ const ProductPageContent = ({
             <ReviewsWrapper productId={productId}/> 
           </div>
         </div>
-        <Sales randomLimit={6}/>
+        <Sales randomLimit={6} mobileItemsLimit={6} />
       </div>
     </div>
   );

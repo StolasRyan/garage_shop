@@ -1,4 +1,4 @@
-import Bonuses from '@/app/(catalog)/catalog/[category]/(productPage)/[id]/_components/Bonuses';
+import Bonuses from '@/app/(catalog)/catalog/[category]/(productPage)/[slug]/_components/Bonuses';
 import { CartItem } from '@/types/cart';
 import { formatPrice } from '@/utils/formatPrice'
 import { getGoodsWord } from '@/utils/getGoodsWord'

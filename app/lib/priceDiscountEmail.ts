@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import path from "path";
 import { Resend } from "resend";
-import PriceAlertEmail from "../(catalog)/catalog/[category]/(productPage)/[id]/_components/PriceAlertEmail";
+import PriceAlertEmail from "../(catalog)/catalog/[category]/(productPage)/[slug]/_components/PriceAlertEmail";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 

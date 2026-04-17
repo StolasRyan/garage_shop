@@ -7,9 +7,10 @@ import PriceFilter from "@/app/components/FilterComponents/PriceFilter";
 import FilterButtons from "@/app/components/FilterComponents/FilterButtons";
 import FilterControls from "@/app/components/FilterComponents/FilterControls";
 import fetchProductsByCategory from "@/app/(catalog)/catalog/[category]/fetchCategory";
+import { baseUrl } from "@/utils/baseUrl";
 
 
-export async function generateMatadate({
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
@@ -18,6 +19,10 @@ export async function generateMatadate({
   return {
     title: TRANSLATIONS[category] || category,
     description: `Description of products categories ${TRANSLATIONS[category] || category} "of garage shop"`,
+    metadateBase: new URL(baseUrl),
+    alternates:{
+      canonical: `${baseUrl}/catalog/${category}` 
+    }
   };
 }
 

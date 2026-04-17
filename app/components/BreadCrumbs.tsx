@@ -3,20 +3,21 @@ import { TRANSLATIONS } from "@/utils/pathTranslations";
 import { HomeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import MiniLoader from "./Header/MiniLoader";
+import { useProduct } from "../contexts/ProductContext";
 
 
 function BreadCrumbsContent(){
   const pathName = usePathname();
-  const searchParams = useSearchParams()
+  const {title} = useProduct()
 
   if (pathName === "/" || pathName === "/search") return null;
 
   const pathSegments = pathName.split("/").filter((segment) => segment !== "");
 
-  const productDesc = searchParams.get('desc')
+  const productDesc = title;
 
   const breadCrumbs: { label: string | React.ReactNode; href: string; isLast: boolean }[] = pathSegments.map((segment, index) => {
 

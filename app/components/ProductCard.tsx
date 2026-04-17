@@ -39,7 +39,7 @@ const ProductCard = ({
 
   const productId = id;
   const mainCategory = categories?.[0];
-  const productUrl = `/catalog/${encodeURIComponent(mainCategory)}/${productId}?desc=${encodeURIComponent(description.substring(0, 50))}`;
+  const productUrl = `/catalog/${encodeURIComponent(mainCategory)}/${productId}}`;
   const isPriorityImage = index < 4;
   return (
     <div className={`relative flex flex-col justify-between w-40 rounded-lg overflow-hidden bg-white  md:w-56 lg:w-68 ${isAdminOrderPage ? 'h-auto' : 'h-87.25'} align-top p-0 hover:shadow-article duration-300 border border-b-cyan-950 `}>
