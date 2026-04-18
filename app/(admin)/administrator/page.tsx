@@ -41,6 +41,12 @@ import Link from 'next/link'
             >
               Delivery graphics
             </Link>
+             <Link
+            href={'/administrator/cms'}
+            className={`${buttonStyles.active} [&&]:justify-start rounded px-4 py-2 w-full md:w-1/2`}
+            >
+              Blog
+            </Link>
         </div>
      </div>
    )

@@ -8,6 +8,7 @@ import { RegFormProvider } from "./contexts/RegFormContext";
 import StatesProvider from "@/store/StatesProvider";
 import StoreProvider from "./provider";
 import { ProductProvider } from "./contexts/ProductContext";
+import { generateSiteMetadata } from "@/utils/generateSiteMetadata";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +20,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLICK_BASE_URL || 'http://localhost:3000'),
-  title: "Garage Shop",
-  description: "Delivery of all your needs in one place.",
-};
+// export const metadata: Metadata = {
+//   metadataBase: new URL(process.env.NEXT_PUBLICK_BASE_URL || 'http://localhost:3000'),
+//   title: "Garage Shop",
+//   description: "Delivery of all your needs in one place.",
+// };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return await generateSiteMetadata();
+}
 
 export default function RootLayout({
   children,

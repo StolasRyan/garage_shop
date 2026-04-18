@@ -11,6 +11,7 @@ async function getProductInfo(id: number): Promise<ProductInfo | null> {
   try {
     const response = await fetch(`${baseUrl}/api/products/${id}`);
 
+    
     if (response.ok) {
       const product = await response.json();
       return {
@@ -48,7 +49,7 @@ export async function handleCatalogProductRedirect(
 
       if (productInfo) {
         const redirectUrl = createRedirectUrl(productInfo, id);
-        return NextResponse.redirect(new URL(redirectUrl, redirectUrl), 308);
+        return NextResponse.redirect(new URL(redirectUrl, request.url), 308);
       }
     }
   }
@@ -69,6 +70,8 @@ export async function handleOldProductRedirect(
 
     if(productInfo){
         const redirectUrl = createRedirectUrl(productInfo, id, category);
+        console.log(redirectUrl);
+        
         return NextResponse.redirect(new URL(redirectUrl, request.url), 308);
     }
   }

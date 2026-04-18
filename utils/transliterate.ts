@@ -70,12 +70,13 @@ export const transliterate = (text: string, toSlug: boolean = false): string => 
 
   let result = text.split('').map((char)=> translitMap[char] || char).join('');
 
-  if(toSlug){
+  if(toSlug){ 
     result = result
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g,'')
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
   }
 
   return result
