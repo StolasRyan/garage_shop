@@ -3,7 +3,8 @@ import { Loader, Loader2 } from "lucide-react";
 import { useSiteSettings } from "../hooks/useSiteSettings";
 import Header from "../_components/Header";
 import SEOForm from "./_components/SEOForm";
-import SEOReccomendations from "./_components/SEOReccomendations";
+import SEOReccomendations from "../_components/SEOReccomendations";
+import { commonSEOReccomendations } from "../utils/reccomendations";
 
 const SemanticCorePage = () => {
   const {
@@ -42,7 +43,7 @@ const SemanticCorePage = () => {
             saving={saving}
             handleSave={handleSave}
         />
-        <SEOReccomendations/>
+        <SEOReccomendations reccomendations={commonSEOReccomendations}/>
     </>
   );
 };

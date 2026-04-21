@@ -1,0 +1,4 @@
+export const CONFIG_BLOG = {
+    MAX_VISIBLE_BUTTONS: 5,
+    ITEMS_PER_PAGE: 10
+}

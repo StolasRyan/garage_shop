@@ -1,3 +1,4 @@
+
 export interface DashboardCard {
     id:string;
     title: string;
@@ -13,4 +14,13 @@ export interface StatItem{
     value: string | number;
     icon: React.ReactNode;
     color: string;
+}
+
+export interface StatItemProps{
+    stat:{
+        title: string;
+        icon: React.ReactNode;
+        color: string;
+    },
+    statValue: string
 }

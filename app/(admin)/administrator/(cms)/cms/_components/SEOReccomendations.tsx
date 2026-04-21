@@ -3,15 +3,9 @@
 import { CheckCircle2 } from 'lucide-react'
 import React from 'react'
 
-const SEOReccomendations = () => {
+const SEOReccomendations = ({reccomendations}: {reccomendations: string[]}) => {
 
-    const reccomendations = [
-        "Use relevant keywords, for your's thematics",
-        "Don't use too many keywords",
-        "Title should be short and descriptive",
-        "Meta-description shoul interest users",
-        "Update semantic core while creating new content"
-    ]
+
 
   return (
     <div className='mt-6 p-4 bg-blue-50 rounded-lg'>
