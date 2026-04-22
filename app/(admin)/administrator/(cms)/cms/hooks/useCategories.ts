@@ -1,51 +1,16 @@
 import { useCategoryStore } from "@/store/categoryStore";
-import { useCallback, useEffect } from "react";
+import {  useEffect } from "react";
 import { ApiResponse, CategoryFormData, UpdateCategoryData } from "../types";
 
 export const useCategories = () => {
-  const {
-    setCategories,
-    setTotalAllItems,
-    editingId,
-    setLoading,
-    setTotalPages,
-    setTotalItems,
-    setCurrentPage,
-    itemsPerPage,
-    currentPage,
-  } = useCategoryStore();
+  const {currentPage,loadCategoties} = useCategoryStore();
 
 
-  const id = editingId;
+  useEffect(() => {
+    loadCategoties({page:currentPage});
+  }, [currentPage, loadCategoties]);
 
-
-  const loadCategoties = useCallback(async (params?:{page?:number}) => {
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams()
-      const pageToLoad = params?.page !== undefined ? params.page : currentPage;
-      queryParams.append('pageToLoad', pageToLoad.toString());
-      queryParams.append('limit', itemsPerPage.toString());
-      const response = await fetch(`/administrator/cms/api/categories?${queryParams}`);
-      const data = await response.json();
-
-      if (data.success) {
-        setCategories(data.data.categories);
-        setTotalAllItems(data.data.totalInDb);
-        setTotalItems(data.data.pagination.total);
-        setTotalPages(data.data.pagination.totalPages); 
-
-        if(params?.page !== undefined && params?.page !== currentPage ){
-          setCurrentPage(params.page);
-        }
-      }
-    } catch (error) {
-      console.error("Error loading categories", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [currentPage, itemsPerPage, setCategories, setCurrentPage, setLoading, setTotalAllItems, setTotalItems, setTotalPages]);
-
+ 
   const createCategory = async (
     categoryData: Omit<CategoryFormData, "keywords">,
   ): Promise<ApiResponse> => {
@@ -61,7 +26,7 @@ export const useCategories = () => {
       const data = await response.json();
 
       if (response.ok) {
-        await loadCategoties();
+        await loadCategoties({page:1});
         return {
           success: true,
           message: data.message || "Category created successfully",
@@ -87,6 +52,7 @@ export const useCategories = () => {
   };
 
   const updateCategory = async (
+    id: string,
     categoryData: UpdateCategoryData,
   ): Promise<ApiResponse> => {
     try {
@@ -101,7 +67,7 @@ export const useCategories = () => {
       const data = await response.json();
 
       if (response.ok) {
-        await loadCategoties();
+        await loadCategoties({page:currentPage});
         return {
           success: true,
           message: data.message || "Category updated successfully",
@@ -135,7 +101,7 @@ export const useCategories = () => {
       const data = await response.json();
 
       if (response.ok) {
-        await loadCategoties();
+        await loadCategoties({page:currentPage});
         return {
           success: true,
           message: data.message || "Category deleted successfully",
@@ -158,10 +124,6 @@ export const useCategories = () => {
       };
     }
   };
-
-  useEffect(() => {
-    loadCategoties();
-  }, [loadCategoties]);
 
   return {
     createCategory,

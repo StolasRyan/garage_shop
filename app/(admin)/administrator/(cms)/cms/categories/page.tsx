@@ -197,7 +197,7 @@ const CategoriesPage = () => {
         keywords: getKeywordsArray(),
       };
 
-      const result = await updateCategory(updateData);
+      const result = await updateCategory(editingId,updateData);
 
       if (result.success) {
         setNotification({
@@ -275,6 +275,9 @@ const CategoriesPage = () => {
       <HeaderActions onCreate={startCreate} />
       <div className="mb-4">
         <ItemsPerPageSelector value={itemsPerPage} onChange={handleItemsPerPageChange}/>
+        <div className="text-sm text-gray-500 mt-1">
+            Current parametrs: page:{currentPage}, elements:{itemsPerPage}
+        </div>
       </div>
       <WarningAlert />
       {showForm && (
