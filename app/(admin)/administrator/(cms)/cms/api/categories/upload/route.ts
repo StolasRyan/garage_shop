@@ -38,7 +38,7 @@ export async function POST(request:NextRequest) {
         if(originalExtension === 'png'){
             optimizedBuffer = await sharp(buffer)
             .resize(800, 450, {
-                fit: 'contain',
+                fit: 'fill',
                 position: 'center',
                 withoutEnlargement: true
             })
@@ -47,14 +47,14 @@ export async function POST(request:NextRequest) {
         }else if(originalExtension === 'gif'){
             optimizedBuffer = await sharp(buffer,{animated: true})
             .resize(800, 450, {
-                fit: 'contain',
+                fit: 'fill',
                 position: 'center',
                 withoutEnlargement: true
             }).gif().toBuffer();
         }else{
             optimizedBuffer = await sharp(buffer)
             .resize(800, 450, {
-                fit: 'contain',
+                fit: 'fill',
                 background: { r: 255, g: 255, b: 255, alpha: 1 },
                 position: 'center',
                 withoutEnlargement: true

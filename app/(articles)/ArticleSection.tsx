@@ -15,7 +15,7 @@ const ArticleSection = ({title, viewAllButton, articles, compact=false}:ArticleS
           <h2 className="text-2xl xl:text-4xl text-left font-bold">{title}</h2>
           {viewAllButton && (<ViewAllButton
             btnText={viewAllButton.text}
-            href={viewAllButton.href}
+            href={`/blog`}
           />)}
           
         </div>

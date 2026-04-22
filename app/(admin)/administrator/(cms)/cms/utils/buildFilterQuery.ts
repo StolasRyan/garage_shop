@@ -1,4 +1,3 @@
-import { de } from "@faker-js/faker";
 import { FilterType } from "../types";
 
 export const buildFilterQuery = (searchQuery: string, filterType: FilterType) => {

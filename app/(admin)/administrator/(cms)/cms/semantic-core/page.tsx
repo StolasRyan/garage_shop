@@ -14,7 +14,6 @@ const SemanticCorePage = () => {
     formData,
     setFormData,
     handleSave,
-    loadSettings,
   } = useSiteSettings();
 
   if(loading){

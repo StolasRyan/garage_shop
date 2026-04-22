@@ -13,6 +13,7 @@ const DesktopCategoryRow= ({
 
     const handleEdit = (e: React.MouseEvent) =>{
         e.stopPropagation();
+        window.scrollTo({top: 0, behavior: 'smooth'});
         onEdit(category);
     }
     const handleDelete = (e: React.MouseEvent) =>{
