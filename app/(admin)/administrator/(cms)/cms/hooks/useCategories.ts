@@ -2,7 +2,7 @@ import { useCategoryStore } from "@/store/categoryStore";
 import {  useEffect } from "react";
 import { ApiResponse, CategoryFormData, UpdateCategoryData } from "../types";
 
-export const useCategories = () => {
+export const  useCategories = () => {
   const {currentPage,loadCategoties} = useCategoryStore();
 
 
@@ -125,10 +125,46 @@ export const useCategories = () => {
     }
   };
 
+  const reorderCategories = async (
+    categories: Array<{ _id: string; numericId: number }>
+  ):Promise<ApiResponse>=>{
+    try {
+        const response = await fetch("/administrator/cms/api/categories/reorder", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(categories),
+        })
+
+        const data = await response.json();
+
+        if(response.ok){
+            await loadCategoties();
+            return {
+                success:true,
+                message:data.message || "Categories reordered successfully"
+            }
+        }else{
+            return {
+                success:false,
+                message:data.message || `Error ${response.status}: ${response.statusText}`
+            }
+        }
+    } catch (error) {
+        console.error("Error reordering categories", error);
+        return {
+            success:false,
+            message:error instanceof Error ? error.message : "Error while reordering categories"
+        }
+    }
+  }
+
   return {
     createCategory,
     deleteCategory,
     updateCategory,
-    loadCategoties
+    loadCategoties,
+    reorderCategories
   };
 };

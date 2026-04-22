@@ -7,7 +7,8 @@ const DesktopCategoryRow= ({
   category,
   displayNumericId,
   onDelete,
-  onEdit 
+  onEdit,
+  isDragging = false
 }:SortableItemProps ) => {
 
     const handleEdit = (e: React.MouseEvent) =>{
@@ -20,7 +21,11 @@ const DesktopCategoryRow= ({
     }
 
   return (
-    <div className={`p-4 hover:bg-gray-50 text-sm`}>
+    <div className={`p-4 hover:bg-gray-50 text-sm duration-200 ${
+        isDragging
+        ? 'opacity-60 bg-linear-to-r from-blue-50 to-green-50 shadow-lg border-2 border-green-400 transform scale-[0.995]'
+        : 'hover:shadow-sm'
+    }`}>
       <div className="grid grid-cols-[0.3fr_0.5fr_1fr_2fr_2fr_2fr_2fr_1fr_1fr_2fr] gap-2 items-center">
         <div>
             <DragHandle/>

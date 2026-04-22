@@ -1,36 +1,52 @@
-import { useEffect, useState } from 'react'
-import DesktopCategoryRow from './DesktopCategoryRow'
-import MobileCategoryCard from './MobileCategoryCard';
-import { SortableItemProps } from '../../types';
+import { useEffect, useState } from "react";
+import DesktopCategoryRow from "./DesktopCategoryRow";
+import MobileCategoryCard from "./MobileCategoryCard";
+import { SortableItemProps } from "../../types";
+import { useCategoryStore } from "@/store/categoryStore";
 
-const SortableItem = ({category, displayNumericId, onDelete,onEdit}:SortableItemProps) => {
+const SortableItem = ({
+  id,
+  category,
+  displayNumericId,
+  onDelete,
+  onEdit,
+}: SortableItemProps) => {
   const [isMobileView, setIsMobileView] = useState(false);
+  const {draggedId} = useCategoryStore();
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileView(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-useEffect(()=>{
-  const checkMobile = () => {
-    setIsMobileView(window.innerWidth < 1024);
-  };
-  checkMobile();
-  window.addEventListener('resize', checkMobile);
-  return ()=> window.removeEventListener('resize', checkMobile);
-},[])
+  const isBeingDragged = draggedId === id;
 
-if(isMobileView){
+  if (isMobileView) {
+    return (
+      <div>
+        <MobileCategoryCard
+          category={category}
+          displayNumericId={displayNumericId}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          isDragging={isBeingDragged}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <MobileCategoryCard
+    <DesktopCategoryRow
       category={category}
       displayNumericId={displayNumericId}
       onDelete={onDelete}
       onEdit={onEdit}
-      />
-    </div>
-  )
-}
+      isDragging={isBeingDragged}
+    />
+  );
+};
 
-  return (
-   <DesktopCategoryRow category={category} displayNumericId={displayNumericId} onDelete={onDelete} onEdit={onEdit}/>
-  )
-}
-
-export default SortableItem
+export default SortableItem;

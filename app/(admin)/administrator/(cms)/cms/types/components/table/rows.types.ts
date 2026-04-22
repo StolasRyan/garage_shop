@@ -9,6 +9,8 @@ export interface SortableItemProps {
   displayNumericId: number | null;
   onDelete: (id: string) => void;
   onEdit: (category: Category) => void;
+  isDragging?: boolean;
+  id?: string;
 }
 
 export interface MobileExpandableContentProps  {

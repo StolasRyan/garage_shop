@@ -1,9 +1,10 @@
 import { Category } from "../../models"
 
 
-export interface CategoryTableProps{
+export interface  CategoryTableProps{
     onEdit: (category: Category) => void
     onDelete: (id: string) => void
+    onReorder?: (reorderedCategories: Category[]) => void 
 }
 
 export type SortField = 'numericId' |  'name' | 'slug' | 'createdAt' | 'author';

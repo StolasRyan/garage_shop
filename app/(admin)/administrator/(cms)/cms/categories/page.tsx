@@ -15,6 +15,8 @@ import HeaderActions from "./_components/HeaderActions";
 import { useCategoryStore } from "@/store/categoryStore";
 import Pagination from "../_components/Pagination";
 import ItemsPerPageSelector from "./_components/ItemsPerPageSelector";
+import { Category } from "../types";
+import ReorderStatus from "./_components/ReorderStatus";
 
 const CategoriesPage = () => {
   const [notification, setNotification] = useState<{
@@ -33,12 +35,19 @@ const CategoriesPage = () => {
     formData,
     currentPage,
     itemsPerPage,
+    setIsReordering,
     setIsSubmitting,
     setItemsPerPage,
-    setCurrentPage
+    setCurrentPage,
   } = useCategoryStore();
 
-  const { createCategory, deleteCategory, updateCategory, loadCategoties } = useCategories();
+  const {
+    createCategory,
+    deleteCategory,
+    updateCategory,
+    loadCategoties,
+    reorderCategories,
+  } = useCategories();
 
   const {
     generateSlug,
@@ -62,7 +71,7 @@ const CategoriesPage = () => {
   }, [notification]);
 
   useEffect(() => {
-    loadCategoties({page: currentPage});
+    loadCategoties({ page: currentPage });
   }, [currentPage, loadCategoties]);
 
   const { errors, validateForm } = useCategoryFormValidation();
@@ -197,7 +206,7 @@ const CategoriesPage = () => {
         keywords: getKeywordsArray(),
       };
 
-      const result = await updateCategory(editingId,updateData);
+      const result = await updateCategory(editingId, updateData);
 
       if (result.success) {
         setNotification({
@@ -253,11 +262,44 @@ const CategoriesPage = () => {
     }
   };
 
+  const handleReorder = async (reorderedCategories: Category[]) => {
+    setIsReordering(true);
+
+    try {
+        const dataForApi = reorderedCategories.map((categoty)=>({
+            _id: categoty._id.toString(),
+            numericId: categoty.numericId || 0,
+        })) ;
+
+        const result = await reorderCategories(dataForApi);
+
+        if(result.success){
+            setNotification({
+                type: "success",
+                message: "Categories reordered successfully",
+            });
+        }else{
+            setNotification({
+                type: "error",
+                message: result.message || "Failed to reorder categories",
+            });
+        }
+    } catch (error) {
+      console.error("Error reordering categories", error);
+      setNotification({
+        type: "error",
+        message: "Failed to reorder categories",
+      });
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
   const handleItemsPerPageChange = (perPage: number) => {
-      setItemsPerPage(perPage);
-      setCurrentPage(1);
-      loadCategoties({page:1})
-  }
+    setItemsPerPage(perPage);
+    setCurrentPage(1);
+    loadCategoties({ page: 1 });
+  };
 
   return (
     <div className="relative">
@@ -274,12 +316,16 @@ const CategoriesPage = () => {
       )}
       <HeaderActions onCreate={startCreate} />
       <div className="mb-4">
-        <ItemsPerPageSelector value={itemsPerPage} onChange={handleItemsPerPageChange}/>
+        <ItemsPerPageSelector
+          value={itemsPerPage}
+          onChange={handleItemsPerPageChange}
+        />
         <div className="text-sm text-gray-500 mt-1">
-            Current parametrs: page:{currentPage}, elements:{itemsPerPage}
+          Current parametrs: page:{currentPage}, elements:{itemsPerPage}
         </div>
       </div>
       <WarningAlert />
+      <ReorderStatus/>
       {showForm && (
         <CategoryForm
           errors={errors}
@@ -290,7 +336,11 @@ const CategoriesPage = () => {
           onCancel={resetForm}
         />
       )}
-      <CategoryTable onDelete={handleDelete} onEdit={startEdit} />
+      <CategoryTable
+        onDelete={handleDelete}
+        onEdit={startEdit}
+        onReorder={handleReorder}
+      />
       {totalPages > 1 && <Pagination />}
       <SEOReccomendations reccomendations={categorySEOReccomendations} />
     </div>
