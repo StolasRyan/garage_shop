@@ -1,6 +1,8 @@
 import { getDB } from "@/utils/api-routes";
+import { sanitizeArticleHTML } from "@/utils/sanitizeArticleHTML";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
+import { processArticleImages } from "../../articles/utils/processArticleImages";
 
 export async function POST(request: Request) {
   try {
@@ -51,7 +53,6 @@ export async function POST(request: Request) {
     const categoryId = data.categoryId.trim();
     const categoryName = data.categoryName?.trim() || "";
     const categorySlug = data.categorySlug?.trim() || "";
-    const content = data.content || "";
     const isFeatured = data.isFeatured || false;
     const status = data.status || "draft";
 
@@ -77,7 +78,18 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       }
-    }
+    };
+
+    const saniteszedContent = sanitizeArticleHTML(data.content || "");
+
+    if(!saniteszedContent || saniteszedContent.trim() === '' || saniteszedContent === "<p></p>"){
+        return NextResponse.json(
+            { success: false, message: "Article content is required" },
+            { status: 400 },
+          );
+    };
+
+    const finalContent = await processArticleImages(saniteszedContent)
 
     const result = await db
       .collection("articles")
@@ -115,7 +127,7 @@ export async function POST(request: Request) {
       categoryId,
       categoryName,
       categorySlug,
-      content,
+      content: finalContent,
       isFeatured,
       status,
       views: 0,

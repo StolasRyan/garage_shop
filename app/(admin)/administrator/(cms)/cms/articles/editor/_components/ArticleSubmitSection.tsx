@@ -2,6 +2,8 @@ import { useArticleStore } from "@/store/articleStore"
 import { Eye, EyeOff, FileText, Globe, Save, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitSectionProps } from "../../../categories/types";
+import ArticlePreviewModal from "./tiptap-components/ArticlePreviewModal";
+import './css/modal-preview.css'
 
 
 const ArticleSubmitSection = ({onCancel}:SubmitSectionProps) => {
@@ -14,6 +16,7 @@ const [articleStatus, setArticleStatus] = useState<'draft' | 'published'>(
 );
 
 const [isFeatured, setIsFeatured] = useState<boolean>(formData.isFeatured || false);
+const [showPreview, setShowPreview] = useState<boolean>(false);
 
 useEffect(()=>{
     if(formData.status){
@@ -54,10 +57,54 @@ const handleCancelWithConfirm = ()=>{
     }else{
         onCancel();
     }
-}
+};
+
+const canPreview = formData.content?.trim() !== '';
 
   return (
     <>
+    <ArticlePreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)} />
+
+    <div className="mb-6 bg-linear-to-r from-purple-50 to-indigo-50 p-4 rounded-xl border border-purple-200">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
+              <Eye className="w-5 h-5 text-purple-600" />
+              Article preview
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Pay attention to the article preview before publishing.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowPreview(true)}
+            disabled={!canPreview || isUploading || isSubmitting}
+            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg cursor-pointer duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium whitespace-nowrap shadow-lg ${
+              canPreview
+                ? "bg-linear-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all"
+                : "bg-gray-200 text-gray-500"
+            }`}
+            title={
+              !canPreview
+                ? "Add content to preview"
+                : "Open article preview"
+            }
+          >
+            <Eye className="w-5 h-5" />
+            <span>Preview</span>
+          </button>
+        </div>
+
+        {!canPreview && (
+          <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-700 text-sm">
+              Article name and content are required for preview.
+            </p>
+          </div>
+        )}
+      </div>
+
     <div className="my-6 bg-gray-50 p-4 rounded border border-gray-200">
         <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 "/>

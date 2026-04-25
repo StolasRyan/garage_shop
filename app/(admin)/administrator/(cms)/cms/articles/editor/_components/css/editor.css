@@ -1,4 +1,6 @@
 @import "./table.css";
+@import './images.css';
+
 .ProseMirror{
     min-height: 400px;
     padding: 1rem;

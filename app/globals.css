@@ -94,3 +94,7 @@ body {
     width: 100%;
   }
 }
+
+img:not(.tiptap-image){
+  height: auto;
+}

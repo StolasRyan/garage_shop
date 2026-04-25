@@ -1,0 +1,44 @@
+import  fs  from "fs/promises";
+import path from "path";
+
+export async function processArticleImages(content:string):Promise<string> {
+    const tempImages = content.match(/\/temp\/temp_[^"']+\.(jpg|jpeg|png|webp)/gi) || [];
+
+    if(tempImages.length === 0) return content;
+
+    const tempDir =path.join(process.cwd(), 'public', 'temp');
+    const articlesDir = path.join(process.cwd(), 'public', 'uploads', 'articles');
+
+    await fs.mkdir(articlesDir, {recursive: true});
+
+    const uniqueTempFiles = [...new Set(tempImages.map((tempImage) => tempImage.split('/').pop()!))];
+
+    for(const tempFileName of uniqueTempFiles){
+        const oldPath = path.join(tempDir, tempFileName);
+
+        try {
+            const originalName = tempFileName.replace('temp_', '');
+            const fileExtension = path.extname(originalName);
+            const baseName = path.parse(originalName).name;
+
+            const shortBaseName = baseName.length > 20 ? baseName.substring(0, 20) : baseName;
+            const suffix = Math.random().toString(36).substring(2, 6);
+
+            const permanentFileName = `${shortBaseName}_${suffix}${fileExtension}`;
+
+            const newPath = path.join(articlesDir, permanentFileName);
+
+            await fs.copyFile(oldPath, newPath);
+
+            await fs.unlink(oldPath);
+
+            const tempUrlPattern = `/temp/${tempFileName}`;
+            const permanentUrl = `/uploads/articles/${permanentFileName}`;
+            content = content.replace(new RegExp(tempUrlPattern, 'gi'), permanentUrl);
+        } catch (error) {
+            console.error(`Error in file ${tempFileName}`, error);
+        }
+    }
+
+    return content;
+}
