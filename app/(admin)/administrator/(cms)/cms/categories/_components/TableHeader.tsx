@@ -1,10 +1,10 @@
 import { useCategoryStore } from '@/store/categoryStore'
 import { ChevronUp, ImageIcon } from 'lucide-react'
 import React from 'react'
-import { SortField } from '../../types';
+import { SortField } from '../types';
 
 const TableHeader = () => {
-    const {currentPage,sortField, sortDirection, searchQuery,setSortField, setSortDirection, loadCategoties} = useCategoryStore();
+    const {currentPage,sortField, sortDirection, searchQuery,setSortField, setSortDirection, loadCategories} = useCategoryStore();
 
     const handleSort = async(field: SortField) => {
         if(sortField===field){
@@ -13,7 +13,7 @@ const TableHeader = () => {
             setSortField(field);
             setSortDirection('asc');
         }
-        await loadCategoties({page:currentPage , search: searchQuery});
+        await loadCategories({page:currentPage , search: searchQuery});
     }
 
     const renderSortIcon = (field: SortField)=>{

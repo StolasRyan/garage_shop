@@ -1,5 +1,5 @@
 import { getDB } from "@/utils/api-routes";
-import { ReorderRequestItem } from "../../../types";
+import { ReorderRequestItem } from "../../../categories/types";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 

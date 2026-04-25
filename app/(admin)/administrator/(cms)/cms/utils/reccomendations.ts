@@ -12,3 +12,13 @@ export    const commonSEOReccomendations = [
         'Description: 10-160 characters, for search systems',
         'Keywords: 10 words max, separated by commas'
     ]
+
+export const articleSEOReccomendations = [
+    'Header H1: 2-60 characters (30-40 optimal), only one per page',
+    'Subheader H2-H6: structure text, that contains keywords',
+    'Key words density: 1-2% from all text',
+    'Text length: 500+ characters for informative content, 1000+ for commercial content',
+    'Inside links: 2-5 links for relevant websites links',
+    'Outside links: links for external resources',
+    'Readeble: low paragraphs (3-4 rows), lists , images',
+]

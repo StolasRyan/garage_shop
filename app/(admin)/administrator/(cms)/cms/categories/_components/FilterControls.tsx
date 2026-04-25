@@ -1,6 +1,6 @@
 import { useCategoryStore } from "@/store/categoryStore";
 import { useState } from "react";
-import { FilterControlsProps } from "../../types";
+import { FilterControlsProps } from "../types";
 import { Filter, X } from "lucide-react";
 
 const FilterControls = ({ onToggleFilters }: FilterControlsProps) => {
@@ -13,7 +13,7 @@ const FilterControls = ({ onToggleFilters }: FilterControlsProps) => {
     setSortField,
     setSortDirection,
     handleSearchChange,
-    loadCategoties
+    loadCategories
   } = useCategoryStore();
   const [localShowFilters, setLocalShowFilters] = useState(false);
 
@@ -29,7 +29,7 @@ const FilterControls = ({ onToggleFilters }: FilterControlsProps) => {
     setFilterType("all");
     setSortField("numericId");
     setSortDirection("asc");
-    loadCategoties({page:1, search: '', filterBy:filterType});
+    loadCategories({page:1, search: '', filterBy:filterType});
   };
 
   const handleToggleFilters = () => {

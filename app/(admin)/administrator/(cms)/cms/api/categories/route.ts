@@ -1,7 +1,7 @@
 import { getDB } from "@/utils/api-routes";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
-import { Category, FilterType, SortField } from "../../types";
+import { Category, FilterType, SortField } from "../../categories/types";
 import { CONFIG_BLOG } from "../../CONFIG_BLOG";
 import { buildSortObject } from "../../utils/buildSortObject";
 import { buildFilterQuery } from "../../utils/buildFilterQuery";
@@ -143,7 +143,7 @@ export async function POST(request: Request) {
       description: data.description?.trim() || "",
       keywords: data.keywords || [],
       image: data.image || "",
-      imageAlt: data.imageAlt || "",
+      imageAlt: data.imageAlt || name,
       author: data.author || "Unknown",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

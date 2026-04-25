@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-react'
 import React from 'react'
 
 const SearchBar = () => {
-  const {searchQuery, handleSearchChange, handleSearchClear,loadCategoties,setCurrentPage} = useCategoryStore();
+  const {searchQuery, handleSearchChange, handleSearchClear,loadCategories,setCurrentPage} = useCategoryStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleSearchChange(e.target.value)
@@ -12,13 +12,13 @@ const SearchBar = () => {
   const handleClear = async()=>{
     handleSearchClear();
     setCurrentPage(1);
-    await loadCategoties({page:1, search: ''});
+    await loadCategories({page:1, search: ''});
   }
 
   const handleSearchClick = async ()=>{
     if(searchQuery.trim() !== ''){
       setCurrentPage(1);
-      await loadCategoties({page:1, search: searchQuery});
+      await loadCategories({page:1, search: searchQuery});
     }
   }
 

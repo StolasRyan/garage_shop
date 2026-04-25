@@ -1,10 +1,10 @@
 import { stats } from "../utils/stats";
 import StatsItem from "./StatsItem";
-import { useStatsValues } from "../hooks/useStatsValues";
-import { useSiteSettings } from "../hooks/useSiteSettings";
 import StatsSkeleton from "./StatsSkeleton";
 import { getStatValue } from "../utils/getStatValue";
 import { useCategoryStore } from "@/store/categoryStore";
+import { useSiteSettings } from "../hooks/useSiteSettings";
+import { useStatsValues } from "../hooks/useStatsValues";
 
 const StatsSection = () => {
   const { categoriesCount, keywordsCount } = useStatsValues();

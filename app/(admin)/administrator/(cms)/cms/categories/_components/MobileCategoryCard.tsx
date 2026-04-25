@@ -3,7 +3,7 @@ import { DragHandle } from './DragHandle'
 import { ChevronDown } from 'lucide-react'
 import MobileCategoryHeader from './MobileCategoryHeader'
 import MobileExpandableContent from './MobileExpandableContent'
-import { SortableItemProps } from '../../types'
+import { SortableItemProps } from '../types'
 
 const MobileCategoryCard = ({category, displayNumericId, onDelete,onEdit, isDragging = false}:SortableItemProps) => {
     const [isExpanded, setIsExpanded] = useState(false);

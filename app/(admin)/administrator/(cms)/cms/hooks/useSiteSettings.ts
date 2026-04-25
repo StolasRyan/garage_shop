@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FormData, SiteSettings } from "../types/siteSettings";
+import { SiteSettings, FormData } from "../types/siteSettings";
 
 export const useSiteSettings = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);

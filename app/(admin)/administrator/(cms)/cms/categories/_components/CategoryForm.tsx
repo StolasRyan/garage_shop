@@ -1,9 +1,10 @@
 "use client";
-import ImageSection from "./ImageSection";
+import ImageSection from "../../_components/ImageSection";
 import FormFields from "./FormFields";
 import SubmitSection from "./SubmitSection";
 import { useCategoryStore } from "@/store/categoryStore";
-import { CategoryFormField, CategoryFormProps, CharCount } from "../../types";
+import { CategoryFormField, CategoryFormProps} from "../types";
+import { CharCount } from "../../types/form/form.types";
 
 const CategoryForm = ({
   errors,
@@ -24,12 +25,12 @@ const CategoryForm = ({
   };
 
   const handleInputChange = (
-    field: CategoryFormField,
+    field: string,
     value: string,
     maxLength: number,
   ) => {
     if (value.length <= maxLength) {
-      updateFormField(field, value);
+      updateFormField(field as CategoryFormField, value);
     }
   };
 
@@ -61,6 +62,7 @@ const CategoryForm = ({
       <h2 className="text-xl font-semibold mb-4">Add new category</h2>
       <form onSubmit={onSubmit}>
         <ImageSection
+          type="category"
           errors={errors}
           charCount={charCount}
           onInputChange={handleInputChange}

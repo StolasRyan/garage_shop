@@ -2,20 +2,20 @@
 import { useAuthStore } from "@/store/authStore";
 import Header from "../_components/Header";
 import SEOReccomendations from "../_components/SEOReccomendations";
-import { useCategoryFormState } from "../hooks/useCategoryFormState";
-import { useCategoryFormValidation } from "../hooks/useCategoryFormValidation";
+import { useCategoryFormState } from "./hooks/useCategoryFormState";
+import { useCategoryFormValidation } from "./hooks/useCategoryFormValidation";
 import { categorySEOReccomendations } from "../utils/reccomendations";
 import CategoryForm from "./_components/CategoryForm";
 import CategoryTable from "./_components/CategoryTable";
 import { useEffect, useState } from "react";
-import { useCategories } from "../hooks/useCategories";
-import Notification from "./_components/Notification";
+import { useCategories } from "./hooks/useCategories";
+import Notification from "../_components/Notification";
 import WarningAlert from "./_components/WarningAlert";
 import HeaderActions from "./_components/HeaderActions";
 import { useCategoryStore } from "@/store/categoryStore";
 import Pagination from "../_components/Pagination";
 import ItemsPerPageSelector from "./_components/ItemsPerPageSelector";
-import { Category } from "../types";
+import { Category } from "./types";
 import ReorderStatus from "./_components/ReorderStatus";
 
 const CategoriesPage = () => {
@@ -45,7 +45,7 @@ const CategoriesPage = () => {
     createCategory,
     deleteCategory,
     updateCategory,
-    loadCategoties,
+    loadCategories,
     reorderCategories,
   } = useCategories();
 
@@ -71,8 +71,8 @@ const CategoriesPage = () => {
   }, [notification]);
 
   useEffect(() => {
-    loadCategoties({ page: currentPage });
-  }, [currentPage, loadCategoties]);
+    loadCategories({ page: currentPage });
+  }, [currentPage, loadCategories]);
 
   const { errors, validateForm } = useCategoryFormValidation();
 
@@ -298,7 +298,7 @@ const CategoriesPage = () => {
   const handleItemsPerPageChange = (perPage: number) => {
     setItemsPerPage(perPage);
     setCurrentPage(1);
-    loadCategoties({ page: 1 });
+    loadCategories({ page: 1 });
   };
 
   return (

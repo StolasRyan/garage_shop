@@ -1,5 +1,5 @@
 import { useCategoryStore } from "@/store/categoryStore";
-import { FilterType, SortField } from "../../types";
+import { FilterType, SortField } from "../types";
 import { ChevronUp } from "lucide-react";
 
 const AdvancedFilters = () => {

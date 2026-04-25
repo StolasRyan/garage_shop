@@ -1,5 +1,5 @@
 import { CONFIG_BLOG } from "@/app/(admin)/administrator/(cms)/cms/CONFIG_BLOG";
-import { Category, CategoryFormData, FilterType, SortDirection, SortField } from "@/app/(admin)/administrator/(cms)/cms/types";
+import { Category, CategoryFormData, FilterType, SortDirection, SortField } from "@/app/(admin)/administrator/(cms)/cms/categories/types";
 import { create } from "zustand";
 
 
@@ -47,7 +47,7 @@ interface CategoryStore{
     setItemsPerPage: (itemsPerPage: number) => void;
     setSortField: (sortField: SortField) => void;
     setSortDirection: (sortDirection: SortDirection) => void;
-    loadCategoties: (params?:{page?:number ,search?:string , filterBy?:FilterType}) => Promise<void>;
+    loadCategories: (params?:{page?:number ,search?:string , filterBy?:FilterType}) => Promise<void>;
     setSearchQuery: (searchQuery: string) => void;
     setFilterType: (filterType: FilterType) => void;
     handleSearchChange: (value: string)=>void;
@@ -118,7 +118,7 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
      setDraggedId: (draggedId) => set({ draggedId }),
      setDragOverId: (dragOverId) => set({ dragOverId }),
      setTempOrder: (tempOrder) => set({ tempOrder }),
-loadCategoties:  async (params?:{page?:number; search?:string; filterBy?:FilterType}) => {
+loadCategories:  async (params?:{page?:number; search?:string; filterBy?:FilterType}) => {
         const state = get();
          set({ loading: true });
          try {

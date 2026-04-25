@@ -9,7 +9,7 @@ import { DashboardCard } from "../types/dashboard";
             description:'Create a new article',
             icon:<Plus className="w-6 h-6"/>,
             color:'blue',
-            path:'/administrator/blog/editor',
+            path:'/administrator/cms/articles/editor',
             actionText:'Create'
         },
         {

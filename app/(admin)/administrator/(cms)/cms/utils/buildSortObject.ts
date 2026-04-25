@@ -1,4 +1,4 @@
-import { SortField } from "../types";
+import { SortField } from "../categories/types";
 
 export const buildSortObject = (sortBy: SortField, sortOrder: string):Record<string, 1 | -1> => {
     const sortDirection: 1 | -1 = sortOrder === 'asc' ? 1 : -1;

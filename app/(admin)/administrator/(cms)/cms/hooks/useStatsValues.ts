@@ -1,13 +1,13 @@
 import { useCategoryStore } from "@/store/categoryStore";
-import { useSiteSettings } from "./useSiteSettings";
 import { useEffect } from "react";
+import { useSiteSettings } from "./useSiteSettings";
 
 export const useStatsValues = () => {
   const { siteSettings } = useSiteSettings();
-  const { totalAllItems , loadCategoties} = useCategoryStore();
+  const { totalAllItems , loadCategories} = useCategoryStore();
 
   useEffect(() => {
-    loadCategoties();
+    loadCategories();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

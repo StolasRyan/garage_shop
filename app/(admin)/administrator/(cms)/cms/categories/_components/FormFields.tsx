@@ -1,7 +1,7 @@
 import { RotateCcw } from "lucide-react";
 import { SEO_LIMITS } from "../../utils/SEO_LIMITS";
 import { useCategoryStore } from "@/store/categoryStore";
-import { FormFieldsProps } from "../../types";
+import { FormFieldsProps } from "../types";
 
 const FormFields = ({ charCount,errors, onInputChange,onGenerateSlug}:FormFieldsProps) => {
     const {formData,isSubmitting} = useCategoryStore();
