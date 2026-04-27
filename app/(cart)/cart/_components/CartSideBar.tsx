@@ -5,7 +5,7 @@ import CartSummary from '../../../components/CartSummary'
 
 const CartSideBar = ({deliveryData, productsData}:CartSidebarProps) => {
   return (
-     <div className="flex flex-col gap-y-6 md:w-63.75 xl:w-68">
+     <div className="flex flex-col gap-y-6 md:w-63.75 lg:w-68">
           <BonusesSection
            
           />

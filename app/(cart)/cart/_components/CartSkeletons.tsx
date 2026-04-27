@@ -21,7 +21,7 @@ const CartSkeletons = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-between items-center gap-2 w-full p-2 md:flex-nowrap md:flex-col md:justify-normal md:items-end xl:flex-row xl:items-start xl:justify-end">
+        <div className="flex flex-wrap justify-between items-center gap-2 w-full p-2 md:flex-nowrap md:flex-col md:justify-normal md:items-end lg:flex-row lg:items-start lg:justify-end">
           <div className="flex items-center gap-2 w-32 h-10 bg-gray-200 p-2 rounded-lg">
             <div className="w-8 h-8 bg-gray-300 rounded"></div>
             <div className="w-16 h-6 bg-gray-300 rounded"></div>

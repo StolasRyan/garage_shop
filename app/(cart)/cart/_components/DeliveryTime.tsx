@@ -107,9 +107,9 @@ const DeliveryTime = ({
   return (
     <div>
       <h2 className="text-2xl md:text-4xl font-bold mb-6">Time to deliver:</h2>
-      <div className="relative flex flex-col gap-y-4 md:flex-row md:flex-nowrap md:gap-x-8 xl:gap-x-10">
+      <div className="relative flex flex-col gap-y-4 md:flex-row md:flex-nowrap md:gap-x-8 lg:gap-x-10">
         <div>
-          <label className={`${labelStyles} text-sm xl:text-base`}>Date</label>
+          <label className={`${labelStyles} text-sm lg:text-base`}>Date</label>
           <select
             value={selectedDate}
             onChange={(e) => onDateChange(e.target.value)}
@@ -123,13 +123,13 @@ const DeliveryTime = ({
           </select>
         </div>
         <div className="flex flex-col w-full">
-          <label className={`${labelStyles} text-sm xl:text-base`}>Time</label>
+          <label className={`${labelStyles} text-sm lg:text-base`}>Time</label>
           {timeSlots.length === 0 ? (
             <div className="text-center bg-red-100 py-2 text-red-500 rounded">
               No delivery times available for the selected date.
             </div>
           ) : (
-            <div className="text-base grid grid-cols-3 xl:grid-cols-4 gap-2 w-full">
+            <div className="text-base grid grid-cols-3 lg:grid-cols-4 gap-2 w-full">
               {timeSlots.map((slot) => (
                 <div
                   key={slot.value}
@@ -157,11 +157,11 @@ const DeliveryTime = ({
                     }`}
                     disabled={!slot.free || slot.passed}
                   >
-                    <span className="xl:hidden text-sm">
+                    <span className="lg:hidden text-sm">
                       {slot.mobileLabel}
                     </span>
 
-                    <span className="hidden xl:block text-base">
+                    <span className="hidden lg:block text-base">
                       {slot.desktopLabel}
                     </span>
                   </button>

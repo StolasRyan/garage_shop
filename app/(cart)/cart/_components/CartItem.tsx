@@ -122,7 +122,7 @@ const CartItem = memo(function CartItem({
             </div>
         </div>
         {showTooltip &&(<Tooltip text="Limited" position="top"/>)}
-        <div className="flex flex-wrap justify-between items-center gap-2 w-full md:w-30 xl:w-59 p-2 md:flex-nowrap md:flex-col md:justify-normal md:items-end xl:flex-row xl:items-start xl:justify-end">
+        <div className="flex flex-wrap justify-between items-center gap-2 w-full md:w-30 lg:w-59 p-2 md:flex-nowrap md:flex-col md:justify-normal md:items-end lg:flex-row lg:items-start lg:justify-end">
             {!isOutOfStock && (
                 <QuantitySelector
                 quantity={quantity}

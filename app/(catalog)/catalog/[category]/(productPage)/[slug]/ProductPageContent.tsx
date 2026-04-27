@@ -51,7 +51,7 @@ const ProductPageContent = ({
           <p className="text-sm">Favorites</p>
         </Link> */}
       </div>
-      <div className="flex flex-col gap-y-25 md:gap-y20 xl:gap-y-30">
+      <div className="flex flex-col gap-y-25 md:gap-y20 lg:gap-y-30">
         <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-10 w-full justify-center">
           <ImagesBlock product={product} />
           <div className="md:w-83.5 lg:w-94 flex flex-col ">
@@ -76,7 +76,7 @@ const ProductPageContent = ({
         </div>
         <SameBrandProducts currentProduct={product} />
         <div>
-          <h2 className="text-2xl xl:text-4xl text-left font-bold text-gray-600 mb-4 md:mb-8 xl:mb-10">
+          <h2 className="text-2xl lg:text-4xl text-left font-bold text-gray-600 mb-4 md:mb-8 lg:mb-10">
             Reviews
           </h2>
           <div className="flex flex-col md:flex-row flex-wrap gap-4 md:gap-x-8 lg:gap-x-36">

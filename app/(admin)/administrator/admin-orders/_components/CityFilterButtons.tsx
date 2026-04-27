@@ -26,7 +26,7 @@ const CityFilterButtons = ({
                 <button
                 key={city}
                 onClick={()=>onCitySelect(city)}
-                className={`p-2 w-auto h-10 rounded duration-300 cursor-pointer text-xs md:text-sm xl:text-base flex justify-between items-center gap-2 ${
+                className={`p-2 w-auto h-10 rounded duration-300 cursor-pointer text-xs md:text-sm lg:text-base flex justify-between items-center gap-2 ${
               selectedCity === city
                 ? "items-center bg-lime-500 text-white relative gap-2 justify-between"
                 : "active:shadow-button-active bg-[#f3f2f1] hover:shadow-button-secondary text-main-text"

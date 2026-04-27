@@ -7,7 +7,7 @@ const GridCategoryBlock = ({slug, img, title, priority = false}: GridCategoryBlo
   return (
     <Link
                 href={`/catalog/${slug}`}
-                className="block relative h-full overflow-hidden group min-w-40 md:min-w-56 xl:min-w-68.5 "
+                className="block relative h-full overflow-hidden group min-w-40 md:min-w-56 lg:min-w-68.5 "
               >
                 <Image
                   src={img}

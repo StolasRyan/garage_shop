@@ -3,6 +3,7 @@ import { BgColorMenu } from "../editor/_components/tiptap-components/BGColorMenu
 import CodeEditorButton from "../editor/_components/tiptap-components/CodeEditorButton";
 import FontSizeMenu from "../editor/_components/tiptap-components/FontSizeMenu";
 import HistoryMenu from "../editor/_components/tiptap-components/HistoryMenu";
+import ImageAIMenu from "../editor/_components/tiptap-components/imageAI/ImageAIMenu";
 import { ImageAttributes } from "../editor/_components/tiptap-components/ImageAttributes";
 import ImageMenu from "../editor/_components/tiptap-components/ImageMenu";
 import { LinkMenu } from "../editor/_components/tiptap-components/LinkMenu";
@@ -81,6 +82,11 @@ export const CONFIG_GROUPS = [
     name: "Text generation",
     items: ["textAI"],
   },
+  {
+    id: "imageAI",
+    name: "Text generation",
+    items: ["imageAI"],
+  },
 ];
  export const CONFIG_TOOLBAR_COMPONENTS = {
   history: { component: HistoryMenu },
@@ -98,4 +104,5 @@ export const CONFIG_GROUPS = [
   imageAttributes: { component: ImageAttributes },
   paragraph: { component: ParagraphButton },
   textAI: { component: TextAIMenu },
+  imageAI: { component: ImageAIMenu },
 } as const;

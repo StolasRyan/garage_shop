@@ -14,7 +14,7 @@ const DeliveryAddress = ({
   return (
     <>
       <h2 className="text-2xl md:text-4xl font-bold mb-6">Deliver to:</h2>
-      <div className="flex flex-col gap-y-4 xl:flex-row xl:flex-nowrap md:gap-x-8 xl:gap-x-10">
+      <div className="flex flex-col gap-y-4 lg:flex-row lg:flex-nowrap md:gap-x-8 lg:gap-x-10">
         <div className="flex flex-col gap-y-4 md:flex-row md:w-full md:justify-between md:gap-x-8">
           <div className="md:flex-1">
             <label className={labelStyles}>Location</label>
@@ -42,7 +42,7 @@ const DeliveryAddress = ({
             />
           </div>
         </div>
-        <div className="flex flex-row gap-x-4 md:gap-x-8 xl:gap-x-10">
+        <div className="flex flex-row gap-x-4 md:gap-x-8 lg:gap-x-10">
           <div className="flex-1">
             <label className={labelStyles}>House</label>
             <input

@@ -1,4 +1,3 @@
-import React from 'react'
 import { EditorProps } from '../../../types'
 import { Type } from 'lucide-react';
 

@@ -12,14 +12,14 @@ const ProductOffer = ({discountedPrice, cardPrice}:ProductOfferProps) => {
   return (
     <div className="flex flex-row justify-between gap-2 leading-1.5 h-19 mb-4">
       <div className="flex flex-col justify-end">
-        <p className="text-[#606060] text-xl md:text-lg xl:text-2xl mb-1.5">
+        <p className="text-[#606060] text-xl md:text-lg lg:text-2xl mb-1.5">
           {formatPrice(discountedPrice)} ₽
         </p>
         <p className="text-[#bfbfbf] text-[8px] md:text-xs">Simple Price</p>
       </div>
 
       <div className="flex flex-col justify-end">
-        <p className="text-main-text text-2xl xl:text-4xl font-bold mb-1.5 text-right">
+        <p className="text-main-text text-2xl lg:text-4xl font-bold mb-1.5 text-right">
           {formatPrice(cardPrice)} ₽
         </p>
         <div className="flex flex-row gap-x-1 items-center relative">

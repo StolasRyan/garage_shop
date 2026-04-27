@@ -38,7 +38,7 @@ const DeliveryTimesAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
   return (
-    <div className='p-3 md:p-4 xl:p-6 w-fill mx-auto md:w-auto'>
+    <div className='p-3 md:p-4 lg:p-6 w-fill mx-auto md:w-auto'>
         <h1 className='text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center'>Delivery graph controls on 3 days</h1>
         
             <AddTimeSlotForm

@@ -12,7 +12,7 @@ const CatalogGrid = ({
   handleDrop,
 }:CatalogGridProps) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 xl:gap-8">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
       {categories.map((category, index) => (
         <div
           key={category._id}

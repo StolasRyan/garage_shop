@@ -16,7 +16,7 @@ const CartControls = ({
   onRemoveSelected,
 }: CartControlsProps) => {
   return (
-  <div className="flex items-center gap-x-10 mb-4 xl:mb-6">
+  <div className="flex items-center gap-x-10 mb-4 lg:mb-6">
     <label className="flex items-center gap-2 cursor-pointer">
         <input
         type="checkbox"

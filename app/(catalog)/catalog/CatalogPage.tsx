@@ -172,7 +172,7 @@ const CatalogPage = () => {
       {isAdmin && (
         <CatalogAdminControls isEditing={isEditing} handleeToogleEditing={handleeToogleEditing} resetLayout={resetLayout}/>
       )}
-      <h1 className="mb-4 md:mb-8 xl:mb-10 flex flex-row text-4xl md:text-5xl xl:text-[64px] text-[#414141] font-bold">
+      <h1 className="mb-4 md:mb-8 lg:mb-10 flex flex-row text-4xl md:text-5xl lg:text-[64px] text-[#414141] font-bold">
         Catalog
       </h1>
       <CatalogGrid 

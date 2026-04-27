@@ -49,7 +49,7 @@ const RatingDistribution = ({
 
   return (
     <div>
-        <div className="flex flex-row gap-x-2 xl:gap-x-4 items-center mb-4">
+        <div className="flex flex-row gap-x-2 lg:gap-x-4 items-center mb-4">
             <div>{renderStars(averageRating)}</div>
             <div className="text-lg font-bold">{averageRating} of 5</div>
         </div>
