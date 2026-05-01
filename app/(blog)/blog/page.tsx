@@ -39,6 +39,12 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: `${baseUrl}/blog`,
     },
     keywords: [...new Set(keywords)],
+    openGraph: {
+      title: "Garage Shop Blog",
+      description,
+      type: 'website',
+      url: `${baseUrl}/blog`,
+    },
   };
 }
 

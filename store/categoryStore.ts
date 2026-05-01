@@ -47,7 +47,7 @@ interface CategoryStore{
     setItemsPerPage: (itemsPerPage: number) => void;
     setSortField: (sortField: SortField) => void;
     setSortDirection: (sortDirection: SortDirection) => void;
-    loadCategories: (params?:{page?:number ,search?:string , filterBy?:FilterType}) => Promise<void>;
+    loadCategories: (params?:{page?:number ,search?:string , filterBy?:FilterType, unlimited?:boolean}) => Promise<void>;
     setSearchQuery: (searchQuery: string) => void;
     setFilterType: (filterType: FilterType) => void;
     handleSearchChange: (value: string)=>void;
@@ -118,7 +118,7 @@ export const useCategoryStore = create<CategoryStore>((set, get) => ({
      setDraggedId: (draggedId) => set({ draggedId }),
      setDragOverId: (dragOverId) => set({ dragOverId }),
      setTempOrder: (tempOrder) => set({ tempOrder }),
-loadCategories:  async (params?:{page?:number; search?:string; filterBy?:FilterType}) => {
+loadCategories:  async (params?:{page?:number; search?:string; filterBy?:FilterType, unlimited?:boolean}) => {
         const state = get();
          set({ loading: true });
          try {
@@ -126,12 +126,19 @@ loadCategories:  async (params?:{page?:number; search?:string; filterBy?:FilterT
            const pageToLoad = params?.page ??  state.currentPage;
            const search = params?.search ?? state.searchQuery;
            const filterBy = params?.filterBy ?? state.filterType;
+           const unlimeted = params?.unlimited ?? false;
            queryParams.append('pageToLoad', pageToLoad.toString());
-           queryParams.append('limit', state.itemsPerPage.toString());
            queryParams.append('sortBy', state.sortField.toString());
            queryParams.append('sortOrder', state.sortDirection.toString());
            queryParams.append('search', search.toString());
            queryParams.append('filterBy', filterBy.toString());
+           
+          if(unlimeted){
+            queryParams.append('limit', '');
+          }else{
+            queryParams.append('limit', state.itemsPerPage.toString());
+          }
+           
      
            const response = await fetch(`/administrator/cms/api/categories?${queryParams}`);
            const data = await response.json();

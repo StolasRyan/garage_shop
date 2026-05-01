@@ -1,4 +1,4 @@
-import { ApiResponse } from "../../types/entities.types";
+import { ArticleApiResponse } from "../../types/entities.types";
 import { ArticleFormData } from "../types";
 
 export const  useArticles = () => {
@@ -6,7 +6,7 @@ export const  useArticles = () => {
  
   const createArticle = async (
     articleData: Omit<ArticleFormData, "keywords">,
-  ): Promise<ApiResponse> => {
+  ): Promise<ArticleApiResponse> => {
     try {
       const response = await fetch("/administrator/cms/api/articles", {
         method: "POST",
@@ -16,19 +16,20 @@ export const  useArticles = () => {
         body: JSON.stringify(articleData),
       });
 
-      const data = await response.json();
+      const responseData = await response.json();
 
       if (response.ok) {
         return {
           success: true,
-          message: data.message || "Article created successfully",
+          message: responseData.message || "Article created successfully",
+          data: responseData.data,
         };
       } else {
-        console.error("Server error", data);
+        console.error("Server error", responseData);
         return {
           success: false,
           message:
-            data.message || `Error ${response.status}: ${response.statusText}`,
+            responseData.message || `Error ${response.status}: ${response.statusText}`,
         };
       }
     } catch (error) {

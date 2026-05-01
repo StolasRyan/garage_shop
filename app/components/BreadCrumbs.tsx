@@ -7,17 +7,24 @@ import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import MiniLoader from "./Header/MiniLoader";
 import { useProduct } from "../contexts/ProductContext";
+import { useArticleTitles } from "../contexts/ArticleContext";
+import { useCategoryTitles } from "../contexts/CategoryContext";
 
 
 function BreadCrumbsContent(){
   const pathName = usePathname();
-  const {title} = useProduct()
+  const {title} = useProduct();
+  const {articleTitle} = useArticleTitles();
+  const {categoryTitle} = useCategoryTitles();
 
   if (pathName === "/" || pathName === "/search") return null;
 
   const pathSegments = pathName.split("/").filter((segment) => segment !== "");
 
   const productDesc = title;
+
+  const isArticlePage = pathSegments[0] === "blog" && pathSegments.length >= 3;
+  const isCategoryPage = pathSegments[0] === "blog" && pathSegments.length >= 2;
 
   const breadCrumbs: { label: string | React.ReactNode; href: string; isLast: boolean }[] = pathSegments.map((segment, index) => {
 
@@ -35,13 +42,30 @@ function BreadCrumbsContent(){
       label = productDesc
     }
 
+    if(isCategoryPage && index === pathSegments.length -1 && categoryTitle){
+      label = categoryTitle
+    }
+    if(isArticlePage && index === pathSegments.length -2 && categoryTitle){
+      label = categoryTitle
+    }
+    if(isArticlePage && index === pathSegments.length -1 && articleTitle){
+      label = articleTitle
+    }
+
+    let finalHref = href;
+    
+    const isLastItem = index === pathSegments.length - 1;
+    
+    const isBlogPage = isArticlePage || isCategoryPage;
+
+    if(isLastItem && !isBlogPage){
+      finalHref = `${href}?desc=${productDesc}`
+    }
+
     return {
       label,
-      href:
-      index === pathSegments.length - 1
-      ? `${href}?desc=${productDesc}`
-      :href,
-      isLast: index === pathSegments.length - 1,
+      href: finalHref,
+      isLast: isLastItem,
     };
   });
 
@@ -64,9 +88,11 @@ function BreadCrumbsContent(){
               }
             >
               {item.isLast ? (
-                item.label
+                <span title={item.label?.toString()}>{item.label}</span>
               ) : (
-                <Link href={item.href}>{item.label}</Link>
+                <Link href={item.href}>
+                  <span title={item.label?.toString()}>{item.label}</span>
+                </Link>
               )}
             </div>
             {!item.isLast && <Image src='/arrow-right.svg' alt={`Go from ${item.label} to ${breadCrumbs[breadCrumbs.length - 1].label}`} width={24} height={24} sizes="24px"/>}

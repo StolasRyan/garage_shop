@@ -11,8 +11,11 @@ import { useArticles } from "../hooks/useArticles";
 import { useArticleFormState } from "../hooks/useArticleFormState";
 import { useCategoryStore } from "@/store/categoryStore";
 import ArticleForm from "./_components/ArticleForm";
+import { ArrowUpCircleIcon } from "lucide-react";
 
 const EditorPage = () => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [currentArticleId, setCurrentArticleId] = useState<string | null>(null);
   const [notification, setNotification] = useState<{
     type: "success" | "error";
     message: string;
@@ -36,7 +39,7 @@ const EditorPage = () => {
   useEffect(()=>{
     const fetchCategories = async () => {
         try {
-            await loadCategories();
+            await loadCategories({unlimited:true});
         } catch (error) {
             console.error('Failed to load categories', error);
         }
@@ -52,6 +55,17 @@ const EditorPage = () => {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+  useEffect(()=>{
+    const handleScroll = ()=>{
+      setShowScrollButton(window.scrollY > 800);
+    }
+
+    window.addEventListener("scroll",handleScroll);
+    return ()=>{
+      window.removeEventListener("scroll",handleScroll);
+    }
+  },[])
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +91,9 @@ const EditorPage = () => {
           return;
         }
       }
+
+      const articleId = currentArticleId || undefined;
+
       const articleData = {
         name: formData.name,
         slug: formData.slug,
@@ -93,16 +110,19 @@ const EditorPage = () => {
         status: formData.status || "draft",
         isFeatured: formData.isFeatured || false,
         views: 0,
+        _id: articleId,
       };
 
       const createResult = await createArticle(articleData);
 
       if (createResult.success) {
+        if(createResult.data?._id && !currentArticleId){
+          setCurrentArticleId(createResult.data?._id)
+        }
         setNotification({
           type: "success",
-          message: "Article created successfully",
+          message: currentArticleId ? "Article updated successfully" : "Article created successfully",
         });
-        resetForm();
       } else {
         setNotification({
           type: "error",
@@ -117,8 +137,13 @@ const EditorPage = () => {
       });
     } finally {
       setIsSubmitting(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 800, behavior: "smooth" });
+  }; 
 
   return (
     <div className="relative">
@@ -139,6 +164,14 @@ const EditorPage = () => {
         onCancel={resetForm}
         />
       <SEOReccomendations reccomendations={articleSEOReccomendations} />
+      {showScrollButton && (
+        <button
+        onClick={scrollToTop}
+        className="fixed bottom-8 right-8 z-50 p-3 bg-lime-400 text-white rounded-full shadow-lg hover:bg-lime-700 cursor-pointer duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          <ArrowUpCircleIcon className="w-6 h-6" />
+        </button>
+      )}
     </div>
   );
 };

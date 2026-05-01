@@ -117,6 +117,8 @@ console.log(apiEndpoint);
 
     if(fromValue > toValue) [fromValue, toValue] = [toValue, fromValue];
 
+    params.delete("page");
+
     params.set("priceFrom", String(fromValue));
     params.set("priceTo", String(toValue));
     params.set('inStock', String(inStock));

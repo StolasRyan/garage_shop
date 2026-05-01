@@ -9,7 +9,7 @@ const Articles = async () => {
     return (
       <ArticleSection
         title="Articles"
-        viewAllButton={{ text: "All Articles", href: "articles" }}
+        viewAllButton={{ text: "All Articles", href: "blog" }}
         articles={items}
         compact
       />

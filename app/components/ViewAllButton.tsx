@@ -8,6 +8,6 @@ const ViewAllButton = ({btnText, href}:{btnText:string, href:string}) => {
                     <Image src='/arrow-right.svg' alt={btnText} width={24} height={24} sizes='24px' priority={false}/>
                 </Link>
   )
-}
+} 
 
 export default ViewAllButton

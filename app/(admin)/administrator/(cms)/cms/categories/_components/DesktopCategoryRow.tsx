@@ -2,6 +2,7 @@ import { Edit, ImageOff, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { DragHandle } from "./DragHandle";
 import { SortableItemProps } from "../types";
+import { useState } from "react";
 
 const DesktopCategoryRow= ({
   category,
@@ -10,6 +11,10 @@ const DesktopCategoryRow= ({
   onEdit,
   isDragging = false
 }:SortableItemProps ) => {
+
+  const [imageError, setImageError] = useState(false);
+
+  const showImage = category.image && !imageError
 
     const handleEdit = (e: React.MouseEvent) =>{
         e.stopPropagation();
@@ -42,7 +47,7 @@ const DesktopCategoryRow= ({
         </div>
 
         <div className="flex items-center justify-center">
-          {category.image ? (
+          {showImage ? (
             <Image
               src={category.image}
               alt={category.imageAlt || category.name}
@@ -50,6 +55,8 @@ const DesktopCategoryRow= ({
               height={50}
               className=" object-cover rounded border border-gray-200"
               title={category.imageAlt || category.name}
+              onError={()=>setImageError(true)}
+              loading='lazy'
             />
           ) : (
             <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">

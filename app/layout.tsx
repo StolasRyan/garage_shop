@@ -9,6 +9,8 @@ import StatesProvider from "@/store/StatesProvider";
 import StoreProvider from "./provider";
 import { ProductProvider } from "./contexts/ProductContext";
 import { generateSiteMetadata } from "@/utils/generateSiteMetadata";
+import { CategoryProvider } from "./contexts/CategoryContext";
+import { ArticleProvider } from "./contexts/ArticleContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,16 +43,20 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <StoreProvider>
-        <StatesProvider>
-        <RegFormProvider>
-          <ProductProvider>
-          <Header />
-          <BreadCrumbs />
-          {children}
-          <Footer />
-          </ProductProvider>
-        </RegFormProvider>
-        </StatesProvider>
+          <StatesProvider>
+            <RegFormProvider>
+              <ProductProvider>
+                <CategoryProvider>
+                  <ArticleProvider>
+                    <Header />
+                    <BreadCrumbs />
+                    {children}
+                    <Footer />
+                  </ArticleProvider>
+                </CategoryProvider>
+              </ProductProvider>
+            </RegFormProvider>
+          </StatesProvider>
         </StoreProvider>
       </body>
     </html>

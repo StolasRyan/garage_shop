@@ -58,7 +58,13 @@ export async function POST(request: Request) {
 
     const db = await getDB();
 
-    const existingArticle = await db.collection("articles").findOne({ slug });
+    const query:Record<string, unknown> = {slug};
+
+    if(data._id && data._id !== ""){
+      query._id = {$ne: ObjectId.createFromHexString(data._id)}
+    }
+
+    const existingArticle = await db.collection("articles").findOne(query);
 
     if (existingArticle) {
       return NextResponse.json(
@@ -82,14 +88,58 @@ export async function POST(request: Request) {
 
     const saniteszedContent = sanitizeArticleHTML(data.content || "");
 
-    if(!saniteszedContent || saniteszedContent.trim() === '' || saniteszedContent === "<p></p>"){
-        return NextResponse.json(
-            { success: false, message: "Article content is required" },
-            { status: 400 },
-          );
-    };
+    // if(!saniteszedContent || saniteszedContent.trim() === '' || saniteszedContent === "<p></p>"){
+    //     return NextResponse.json(
+    //         { success: false, message: "Article content is required" },
+    //         { status: 400 },
+    //       );
+    // };
 
-    const finalContent = await processArticleImages(saniteszedContent)
+    const finalContent = await processArticleImages(saniteszedContent);
+
+    if(data._id && data._id.trim() !== ''){
+      try {
+        const objectId = ObjectId.createFromHexString(data._id);
+
+        const updateData = {
+          name,
+          slug,
+          description,
+          keywords,
+          image,
+          imageAlt,
+          author,
+          categoryId,
+          categoryName,
+          categorySlug,
+          content: finalContent,
+          isFeatured,
+          status,
+          updatedAt: new Date().toISOString(),
+          ...(status === 'published' && { publishedAt: new Date().toISOString() }),
+        };
+
+        const result = await db.collection("articles").updateOne({_id: objectId}, {$set: updateData});
+
+        if(result.matchedCount === 0){
+          return NextResponse.json(
+            { success: false, message: "Article not found" },
+            { status: 404 },
+          );
+        }
+
+        return NextResponse.json(
+          { success: true, message: "Article updated successfully" },
+          { status: 200 },
+        );
+      } catch (error) {
+        console.error("Error updating article:", error);
+        return NextResponse.json(
+          { success: false, message: "Error updating article" },
+          { status: 500 },
+        );
+      }
+    }
 
     const result = await db
       .collection("articles")
