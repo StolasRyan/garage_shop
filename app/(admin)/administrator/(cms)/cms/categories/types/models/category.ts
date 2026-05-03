@@ -10,6 +10,7 @@ export interface Category {
     author: string;
     createdAt: string;
     updatedAt: string;
+    articlesCount?: string;
 }
 
 export interface UpdateCategoryData{

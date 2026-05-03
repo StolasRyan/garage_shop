@@ -1,6 +1,5 @@
 import { useCategoryStore } from '@/store/categoryStore'
 import { ChevronUp, ImageIcon } from 'lucide-react'
-import React from 'react'
 import { SortField } from '../types';
 
 const TableHeader = () => {
@@ -28,8 +27,8 @@ const TableHeader = () => {
 
   return (
     <div className='hidden lg:block border border-gray-200'>
-        <div className='grid grid-cols-[0.3fr_0.5fr_1fr_2fr_2fr_2fr_2fr_1fr_1fr_2fr] gap-2 p-4 bg-gray-200 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider'>
-            <div></div>
+        <div className='grid lg:grid-cols-[32px_40px_50px_100px_80px_120px_120px_80px_80px_80px_100px]  xl:grid-cols-[32px_40px_50px_120px_80px_160px_160px_80px_80px_80px_100px] gap-2 items-center justify-between'>
+            <div className='w-8'></div>
             <div 
             onClick={()=>handleSort('numericId')}
             title='Sort by ID'
@@ -66,6 +65,14 @@ const TableHeader = () => {
              className='text-center cursor-pointer hover:text-gray-700 flex items-center justify-center'>
                 Author {renderSortIcon('author')}
             </div>
+
+            <div
+          className="text-center cursor-pointer hover:text-gray-700 flex items-center justify-center"
+          onClick={() => handleSort("articles")}
+          title="Сортировать по кол-ву статей"
+        >
+          Articles {renderSortIcon("articles")}
+        </div>
 
             <div
             onClick={()=>handleSort('createdAt')}

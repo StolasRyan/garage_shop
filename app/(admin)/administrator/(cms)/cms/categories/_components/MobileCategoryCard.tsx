@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DragHandle } from './DragHandle'
+import { DragHandle } from '../../_components/DragHandle'
 import { ChevronDown } from 'lucide-react'
 import MobileCategoryHeader from './MobileCategoryHeader'
 import MobileExpandableContent from './MobileExpandableContent'

@@ -77,9 +77,9 @@ function BreadCrumbsContent(){
 
   return (
     <nav className="px-[max(12px, calc((100%-1208px)/2))] my-6 ml-3">
-      <ol className="flex gap-4 items-center text-[8px] md:text-xs">
+      <ol className="flex flex-wrap gap-4 items-center text-[8px] md:text-xs">
         {breadCrumbs.map((item, index) => (
-          <li key={index} className="flex items-center gap-4">
+          <li key={index} className="flex text-xs items-center gap-4">
             <div
               className={
                 item.isLast

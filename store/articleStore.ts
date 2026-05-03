@@ -1,5 +1,25 @@
+import { ArticleStatus } from "@/app/(admin)/administrator/(cms)/cms/articles/articlesManagment/types";
 import { ArticleFormData } from "@/app/(admin)/administrator/(cms)/cms/articles/types";
 import { create } from "zustand";
+
+interface ApiArticle {
+  _id?: string | null;
+  name: string;
+  slug: string;
+  description?: string;
+  keywords?: string[];
+  image?: string;
+  imageAlt?: string;
+  categoryId: string;
+  categoryName: string;
+  categorySlug: string;
+  content?: string;
+  status?: ArticleStatus;
+  isFeatured?: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+}
+
 
 interface ArticleStore {
   formData: ArticleFormData;
@@ -13,9 +33,11 @@ interface ArticleStore {
   updateFormField: (field: keyof ArticleFormData, value: string | boolean) => void;
   resetFormData: () => void;
   setOriginalImageUrl: (originalImageUrl: string) => void;
+  setArticleData: (apiData: ApiArticle) => void;
 }
 
 const intialFormData: ArticleFormData = {
+  _id: null,
   name: "",
   slug: "",
   description: "",
@@ -43,5 +65,29 @@ export const useArticleStore = create<ArticleStore>((set) => ({
   setOriginalImageUrl: (originalImageUrl) => set({ originalImageUrl }),
   updateFormField: (field, value) =>
     set((state) => ({ formData: { ...state.formData, [field]: value } })),
+
+  setArticleData: (apiData)=>
+    set((state)=>({
+      formData:{
+        ...state.formData,
+        _id: apiData._id || null,
+        name: apiData.name,
+        slug: apiData.slug,
+        description: apiData.description || "",
+        keywords: apiData.keywords?.join(", ") || "",
+        image: apiData.image || "",
+        imageAlt: apiData.imageAlt || "",
+        categoryId: apiData.categoryId,
+        categoryName: apiData.categoryName,
+        categorySlug: apiData.categorySlug,
+        status: apiData.status || "draft",
+        content: apiData.content || "",
+        metaTitle: apiData.metaTitle || "",
+        metaDescription: apiData.metaDescription || "",
+        isFeatured:Boolean(apiData.isFeatured)
+      }
+    })),
+
   resetFormData: () => set({ formData: intialFormData }),
+   
 }));

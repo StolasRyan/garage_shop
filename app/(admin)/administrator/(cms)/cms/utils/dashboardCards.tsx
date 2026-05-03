@@ -18,7 +18,7 @@ import { DashboardCard } from "../types/dashboard";
             description:'Articles managment controls',
             icon:<FileText className="w-6 h-6"/>,
             color:'indigo',
-            path:'/administrator/cms',
+            path:'/administrator/cms/articles/articlesManagment',
             actionText:'Create'
         },
         {

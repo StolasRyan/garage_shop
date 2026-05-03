@@ -1,4 +1,6 @@
+import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import BlogSearch from "./_components/BlogSearch";
+import BlogShareButtons from "./_components/BlogShareButtons";
 
 
 export default function BlogLayout({
@@ -12,6 +14,8 @@ export default function BlogLayout({
             <BlogSearch/>
             </div>
             {children}
+            <BlogShareButtons/>
+            <ScrollToTopButton appearPosition={300}/>
         </div>
     )
 }

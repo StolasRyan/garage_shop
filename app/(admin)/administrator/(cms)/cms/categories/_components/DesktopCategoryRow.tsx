@@ -1,6 +1,6 @@
 import { Edit, ImageOff, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { DragHandle } from "./DragHandle";
+import { DragHandle } from "../../_components/DragHandle";
 import { SortableItemProps } from "../types";
 import { useState } from "react";
 
@@ -119,6 +119,15 @@ const DesktopCategoryRow= ({
             title={category.author || "Unknown author"}
           >
             {category.author || <span className="text-gray-400">—</span>}
+          </div>
+        </div>
+
+        <div className="min-w-0 flex justify-center">
+          <div
+            className="text-gray-600 text-xs wrap-break-word text-center"
+            title={category.articlesCount || "No"}
+          >
+            {category.articlesCount || <span className="text-gray-400">—</span>}
           </div>
         </div>
 

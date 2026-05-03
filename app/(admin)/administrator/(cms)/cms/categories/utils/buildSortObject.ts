@@ -1,4 +1,4 @@
-import { SortField } from "../categories/types";
+import { SortField } from "../types";
 
 export const buildSortObject = (sortBy: SortField, sortOrder: string):Record<string, 1 | -1> => {
     const sortDirection: 1 | -1 = sortOrder === 'asc' ? 1 : -1;
@@ -14,6 +14,8 @@ export const buildSortObject = (sortBy: SortField, sortOrder: string):Record<str
             return { createdAt: sortDirection };
         case 'author':
             return { author: sortDirection }; 
+        case 'articles':
+            return { articlesCount: sortDirection };     
         default:
             return { numericId: sortDirection };
     }

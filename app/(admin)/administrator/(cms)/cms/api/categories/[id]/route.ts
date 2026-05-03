@@ -129,7 +129,7 @@ export async function DELETE(
     const categoryId = new ObjectId(id);
 
     const articlesCount = await db.collection("articles").countDocuments({
-      category: id,
+      categoryId: id,
     });
 
     if (articlesCount > 0) {

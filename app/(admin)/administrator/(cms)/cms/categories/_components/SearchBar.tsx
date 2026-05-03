@@ -16,10 +16,8 @@ const SearchBar = () => {
   }
 
   const handleSearchClick = async ()=>{
-    if(searchQuery.trim() !== ''){
       setCurrentPage(1);
       await loadCategories({page:1, search: searchQuery});
-    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>)=>{

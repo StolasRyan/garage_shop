@@ -14,7 +14,7 @@ import WarningAlert from "./_components/WarningAlert";
 import HeaderActions from "./_components/HeaderActions";
 import { useCategoryStore } from "@/store/categoryStore";
 import Pagination from "../_components/Pagination";
-import ItemsPerPageSelector from "./_components/ItemsPerPageSelector";
+import ItemsPerPageSelector from "../_components/ItemsPerPageSelector";
 import { Category } from "./types";
 import ReorderStatus from "./_components/ReorderStatus";
 
@@ -65,7 +65,7 @@ const CategoriesPage = () => {
     if (notification) {
       const timer = setTimeout(() => {
         setNotification(null);
-      }, 5000);
+      }, 8000);
       return () => clearTimeout(timer);
     }
   }, [notification]);
@@ -260,6 +260,7 @@ const CategoriesPage = () => {
         message: result.message || "Failed to delete category",
       });
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleReorder = async (reorderedCategories: Category[]) => {
@@ -341,7 +342,7 @@ const CategoriesPage = () => {
         onEdit={startEdit}
         onReorder={handleReorder}
       />
-      {totalPages > 1 && <Pagination />}
+      {totalPages > 1 && <Pagination  type="categories"/>}
       <SEOReccomendations reccomendations={categorySEOReccomendations} />
     </div>
   );

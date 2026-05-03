@@ -44,8 +44,37 @@ export const  useArticles = () => {
     }
   };
 
+  const getArticle = async (id:string):Promise<ArticleApiResponse>=>{
+    try {
+      const response = await fetch(`/administrator/cms/api/articles/articles-managment/${id}`,{
+        method:'GET',
+      });
+
+      const data = await response.json();
+      if(response.ok){
+        return {
+          success:true,
+          data:data.data,
+          message:data.message || "Article loaded successfully"
+        }
+      }else{
+        return {
+          success:false,
+          message:data.message || "Failed to load article"
+        }
+      }
+    } catch (error) {
+      console.error("Error loading article", error);
+      return {
+        success:false,
+        message:"Failed to load article"
+      }
+    }
+  }
+
 
   return {
     createArticle,
+    getArticle
   };
 };

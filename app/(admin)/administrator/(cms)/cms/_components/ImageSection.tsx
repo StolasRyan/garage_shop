@@ -37,7 +37,7 @@ const ImageSection = ({
       <div className="space-y-4">
         {formData.image && (
           <div className="bg-white p-4 rounded border border-gray-200">
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col lg:flex-row items-start gap-4">
               <div className="shrink-0 bg-gray-100">
                 <Image
                   src={formData.image}

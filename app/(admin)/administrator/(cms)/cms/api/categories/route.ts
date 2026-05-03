@@ -2,8 +2,8 @@ import { getDB } from "@/utils/api-routes";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 import { Category, FilterType, SortField } from "../../categories/types";
-import { buildSortObject } from "../../utils/buildSortObject";
-import { buildFilterQuery } from "../../utils/buildFilterQuery";
+import { buildSortObject } from "../../categories/utils/buildSortObject";
+import { buildFilterQuery } from "../../categories/utils/buildFilterQuery";
 
 export async function GET(request: Request) {
   try {
@@ -24,21 +24,59 @@ export async function GET(request: Request) {
     const validPage = Math.max(page, 1);
     const validLimit = Math.max(1, Math.min(limit, 100));
 
-    const sortObject = buildSortObject(sortBy, sortOrder);
+    //const sortObject = buildSortObject(sortBy, sortOrder);
 
     const filterQuery = buildFilterQuery(search, filterBy)
 
     const skip = (validPage - 1) * validLimit;
 
-    const categories = await db
+    if(sortBy === 'articles'){
+      const order = sortOrder === 'asc' ? 1 : -1;
+
+      const aggregationPipeline = [
+        {$match:filterQuery},
+        {
+          $lookup: {
+            from: 'articles',
+            let: {categotyId: {$toString: "$_id"}},
+            pipeline: [
+              {
+                $match:{
+                  $expr:{
+                    $eq:[
+                      "$categoryId",
+                      {$toString: "$$categotyId"}
+                    ]
+                  }
+                }
+              }
+            ],
+            as: "categoryArticles",
+          }
+        },
+        {
+          $addFields:{
+            articlesCount: {
+              $size: "$categoryArticles"
+            }
+          }
+        },
+        {$sort:{articlesCount: order}},
+        {$skip: skip},
+        {$limit: validLimit},
+        {
+          $project:{
+            categoryArticles: 0
+          }
+        }
+      ];
+
+      const categories = await db
       .collection<Category>("article-category")
-      .find(filterQuery)
-      .sort(sortObject)
-      .skip(skip)
-      .limit(validLimit)
+      .aggregate(aggregationPipeline)
       .toArray();
 
-    const totalInDb = await db
+      const totalInDb = await db
       .collection<Category>("article-category")
       .countDocuments({});
 
@@ -46,14 +84,15 @@ export async function GET(request: Request) {
       .collection<Category>("article-category")
       .countDocuments(filterQuery);
 
-    const totalPages = Math.ceil(totalFiltered / validLimit);
+      const totalPages = Math.ceil(totalFiltered / validLimit);
 
-    const response = {
+      const response = {
       success: true,
       data: {
         categories: categories.map((c) => ({
           ...c,
           _id: c._id.toString(),
+          articlesCount: (c as Category & {articlesCount:number}).articlesCount || 0,
         })),
         totalInDb,
         pagination: {
@@ -66,6 +105,78 @@ export async function GET(request: Request) {
       },
     };
     return NextResponse.json(response);
+  }
+
+  const sortObject = buildSortObject(sortBy, sortOrder);
+
+  const categories = await db
+    .collection<Category>("article-category")
+    .find(filterQuery)
+    .sort(sortObject)
+    .skip(skip)
+    .limit(validLimit)
+    .toArray();
+
+    const categoryIds = categories.map((cat) => cat._id.toString());
+
+    const articlesCounts: Record<string, number> = {};
+
+    if(categoryIds.length > 0 ){
+      const counts = await db.collection("articles")
+      .aggregate<{_id: string, count: number}>([
+        {
+          $match:{
+            categoryId: {
+              $in: categoryIds
+            }
+          }
+        },
+        {
+          $group:{
+            _id: "$categoryId",
+            count: {$sum: 1}
+          }
+        }
+      ]).toArray();
+
+      counts.forEach((item)=>{
+        articlesCounts[item._id] = item.count
+      })
+    }
+
+     const categoriesWithCounts = categories.map((cat) => ({
+      ...cat,
+      _id: cat._id.toString(),
+      articlesCount: articlesCounts[cat._id.toString()] || 0,
+    }));
+
+    const totalInDB = await db
+      .collection<Category>("article-category")
+      .countDocuments({});
+
+      const totalFiltered = await db
+      .collection<Category>("article-category")
+      .countDocuments(filterQuery);
+
+      const totalPages = Math.ceil(totalFiltered / validLimit);
+
+      const response = {
+      success: true,
+      data: {
+        categories: categoriesWithCounts,
+        totalInDB,
+        pagination: {
+          page: validPage,
+          limit: validLimit,
+          total: totalFiltered,
+          totalAll: totalInDB,
+          totalPages,
+        },
+      },
+    };
+
+    return NextResponse.json(response);
+    
   } catch (error) {
     console.error("Error loading categories", error);
     return NextResponse.json(

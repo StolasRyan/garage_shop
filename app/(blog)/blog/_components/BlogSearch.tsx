@@ -74,7 +74,7 @@ const BlogSearch = () => {
                             setError('')
                         }}
                         placeholder="Articles name or description"
-                        className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-lime-400 focus:border-lime-500 outline-none"
+                        className="w-full text-xs md:text-base pl-10 pr-10 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-lime-400 focus:border-lime-500 outline-none"
                         disabled={isSearching}
                         />
                         {searchTerm && (

@@ -1,43 +1,48 @@
-'use client'
+"use client";
 
-import { Loader } from '@/app/components/Loader';
-import { useAuthStore } from '@/store/authStore'
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import { Loader } from "@/app/components/Loader";
+import ScrollToTopButton from "@/app/components/ScrollToTopButton";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const AdminLayout = ({children}:{children:React.ReactNode}) => {
-    const {user, isLoading, checkAuth}=useAuthStore();
-    const [isChecking, setIsChecking] = useState(true);
-    const router = useRouter();
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading, checkAuth } = useAuthStore();
+  const [isChecking, setIsChecking] = useState(true);
+  const router = useRouter();
 
-    useEffect(()=>{
-        const verifyAccess = async()=>{
-            await checkAuth();
-            setIsChecking(false);
-        }
-        verifyAccess();
-    },[checkAuth]);
+  useEffect(() => {
+    const verifyAccess = async () => {
+      await checkAuth();
+      setIsChecking(false);
+    };
+    verifyAccess();
+  }, [checkAuth]);
 
-    useEffect(()=>{
-        if(!isChecking){
-            const hasAccess = user && (user.role === 'admin' || user.role === 'manager');
-            if(!hasAccess){
-                router.replace('/')
-            }
-        }
-    },[isChecking, router, user]);
-
-    if(isLoading || isChecking){
-        return <Loader/>
+  useEffect(() => {
+    if (!isChecking) {
+      const hasAccess =
+        user && (user.role === "admin" || user.role === "manager");
+      if (!hasAccess) {
+        router.replace("/");
+      }
     }
+  }, [isChecking, router, user]);
 
-    if(!user || (user.role !== 'admin' && user.role !== 'manager')){
-        return null
-    }
+  if (isLoading || isChecking) {
+    return <Loader />;
+  }
+
+  if (!user || (user.role !== "admin" && user.role !== "manager")) {
+    return null;
+  }
 
   return (
-    <>{children}</>
-  )
-}
+    <>
+      {children}
+      <ScrollToTopButton appearPosition={300} finishPosition={600} />
+    </>
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;

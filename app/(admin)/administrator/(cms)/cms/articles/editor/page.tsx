@@ -11,19 +11,65 @@ import { useArticles } from "../hooks/useArticles";
 import { useArticleFormState } from "../hooks/useArticleFormState";
 import { useCategoryStore } from "@/store/categoryStore";
 import ArticleForm from "./_components/ArticleForm";
-import { ArrowUpCircleIcon } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Loader } from "@/app/components/Loader";
 
 const EditorPage = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false);
   const [currentArticleId, setCurrentArticleId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{
     type: "success" | "error";
     message: string;
   } | null>(null);
   const { user } = useAuthStore();
+  const searchParams = useSearchParams();
+
+  useEffect(()=>{
+    const articleId = searchParams.get("id");
+    if(articleId){
+      setCurrentArticleId(articleId);
+    }
+  },[searchParams])
+
   const author = `${user?.surname} ${user?.name}`.trim() || "Unknown";
-  const { formData, updateFormField, setIsSubmitting } = useArticleStore();
-  const { createArticle } = useArticles();
+  const { formData, updateFormField, setIsSubmitting, setArticleData, resetFormData } = useArticleStore();
+  const { createArticle, getArticle } = useArticles();
+
+  useEffect(()=>{
+    const loadArticle = async () => {
+      const articleId = searchParams?.get("id");
+
+      if(articleId){
+        setIsLoading(true);
+        setCurrentArticleId(articleId);
+
+        try {
+          const result = await getArticle(articleId);
+
+          if(result.success && result.data){
+            setArticleData(result.data);
+          }else{
+            setNotification({
+              type: "error",
+              message: result.message || "Failed to load article",
+            });
+          }
+        } catch (error) {
+          console.error("Error loading article", error);
+          setNotification({
+            type: "error",
+            message: "Failed to load article",
+          });
+        }finally{
+          setIsLoading(false);
+        }
+      }else{
+        resetFormData();
+      }
+    }
+
+    loadArticle();
+  },[ searchParams])
 
   const {
     generateSlug,
@@ -55,17 +101,6 @@ const EditorPage = () => {
       return () => clearTimeout(timer);
     }
   }, [notification]);
-
-  useEffect(()=>{
-    const handleScroll = ()=>{
-      setShowScrollButton(window.scrollY > 800);
-    }
-
-    window.addEventListener("scroll",handleScroll);
-    return ()=>{
-      window.removeEventListener("scroll",handleScroll);
-    }
-  },[])
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,9 +176,7 @@ const EditorPage = () => {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 800, behavior: "smooth" });
-  }; 
+ if(isLoading) return <Loader/>
 
   return (
     <div className="relative">
@@ -164,14 +197,7 @@ const EditorPage = () => {
         onCancel={resetForm}
         />
       <SEOReccomendations reccomendations={articleSEOReccomendations} />
-      {showScrollButton && (
-        <button
-        onClick={scrollToTop}
-        className="fixed bottom-8 right-8 z-50 p-3 bg-lime-400 text-white rounded-full shadow-lg hover:bg-lime-700 cursor-pointer duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          <ArrowUpCircleIcon className="w-6 h-6" />
-        </button>
-      )}
+      
     </div>
   );
 };
