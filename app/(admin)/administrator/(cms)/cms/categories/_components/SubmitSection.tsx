@@ -14,13 +14,13 @@ const SubmitSection = ({ onCancel}:SubmitSectionProps) => {
           </div>
         </div>
       )}
-      <div className="flex gap-3 mt-6 ">
+      <div className="flex flex-wrap gap-3 mt-6 ">
         <button
           type="submit"
           disabled={isSubmitting || isUploading}
-          className="flex items-center gap-1 px-4 py-2.5 bg-primary text-white rounded hover:shadow-button-default active:shadow-button-active cursor-pointer duration-300"
+          className="w-full flex items-center gap-1 text-xs md:text-base px-4 py-2.5 bg-primary text-white rounded hover:shadow-button-default active:shadow-button-active cursor-pointer duration-300"
         >
-          <Save className="w-4 h-4" />
+          <Save className="w-4 h-4 shrink-0" />
           {isSubmitting
             ? "Saving..."
             : editingId
@@ -31,7 +31,7 @@ const SubmitSection = ({ onCancel}:SubmitSectionProps) => {
           type="button"
           onClick={onCancel}
           disabled={isSubmitting || isUploading}
-          className="px-4 py-2.5 border border-gray-300 rounded hover:bg-gray-50 bg-gray-300 text-gray-700 hover:text-gray-500 flex items-center gap-1 cursor-pointer duration-300"
+          className="w-full px-4 py-2.5 border border-gray-300 rounded hover:bg-gray-50 bg-gray-300 text-gray-700 hover:text-gray-500 flex items-center gap-1 cursor-pointer duration-300"
         >
           <XCircle className="w-4 h-4" />
           Cancel

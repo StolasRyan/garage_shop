@@ -53,7 +53,7 @@ const FormFields = ({ charCount,errors, onInputChange,onGenerateSlug}:FormFields
           >{charCount.slug}/{SEO_LIMITS.slug.max}
           </span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
             <input 
             type="text" 
             required 
@@ -77,7 +77,7 @@ const FormFields = ({ charCount,errors, onInputChange,onGenerateSlug}:FormFields
             type="button" 
             onClick={onGenerateSlug}
             disabled={isSubmitting}
-            className="flex items-center gap-1 px-4 py-2.5 bg-gray-50 text-gray-700 rounded hover:bg-gray-100 text-sm whitespace-nowrap cursor-pointer duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400">
+            className="flex w-full items-center gap-1 px-4 py-2.5 bg-gray-50 text-gray-700 rounded hover:bg-gray-100 text-sm whitespace-nowrap cursor-pointer duration-200 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-400">
                 <RotateCcw className="w-4 h-4"/>
                 Generate
             </button>
@@ -133,7 +133,7 @@ const FormFields = ({ charCount,errors, onInputChange,onGenerateSlug}:FormFields
         value={formData.keywords}
         disabled={isSubmitting}
         onChange={(e)=>onInputChange('keywords', e.target.value, SEO_LIMITS.keywords.maxLength)}
-        className={`w-full px-3 py-2.5 border rounded focus:outline-none focus:ring-3 duration-300 ${
+        className={`w-full text-xs px-3 py-2.5 border rounded focus:outline-none focus:ring-3 duration-300 ${
             errors.keywords
             ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
             : 'border-gray-300 focus:border-primary focus:ring-primary/50'

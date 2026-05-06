@@ -7,10 +7,16 @@ import { useSiteSettings } from "../hooks/useSiteSettings";
 import { useStatsValues } from "../hooks/useStatsValues";
 
 const StatsSection = () => {
-  const { categoriesCount, keywordsCount, publishedCount, viewsCount, loading } = useStatsValues();
+  const {
+    categoriesCount,
+    keywordsCount,
+    publishedCount,
+    viewsCount,
+    loading,
+  } = useStatsValues();
   const { loading: settingsLoading } = useSiteSettings();
-  const {loading: categoriesLoading} = useCategoryStore();
-  const isLoading =  loading || settingsLoading || categoriesLoading;
+  const { loading: categoriesLoading } = useCategoryStore();
+  const isLoading = loading || settingsLoading || categoriesLoading 
 
   if (isLoading) return <StatsSkeleton />;
   return (
@@ -25,10 +31,10 @@ const StatsSection = () => {
             stat={stat}
             statValue={getStatValue(
               stat.title,
-              categoriesCount.toString(),
-              keywordsCount.toString(),
-              publishedCount.toString(),
-              viewsCount.toString()
+              (categoriesCount ?? 0).toString(),
+              (keywordsCount ?? 0).toString(),
+              (publishedCount ?? 0).toString(),
+              (viewsCount ?? 0).toString(),
             )}
           />
         ))}

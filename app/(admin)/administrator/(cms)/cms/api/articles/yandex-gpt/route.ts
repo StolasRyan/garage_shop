@@ -91,6 +91,7 @@ export async function POST(request:NextRequest) {
         };
 
         return NextResponse.json({
+            success: true,
             text: generatedText,
             provider: 'YandexGPT',
             model: 'yandexgpt'

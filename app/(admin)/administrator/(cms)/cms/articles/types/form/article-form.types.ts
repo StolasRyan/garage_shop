@@ -3,7 +3,7 @@ export interface ArticleFormData {
   name: string;
   slug: string;
   description: string;
-  keywords: string;
+  keywords: string | string[];
   image: string;
   imageAlt: string;
   categoryId: string;
@@ -14,6 +14,7 @@ export interface ArticleFormData {
   metaTitle?: string;
   metaDescription?: string;
   isFeatured?: boolean;
+  author?: string;
 }
 
 export interface ArticleFormProps {

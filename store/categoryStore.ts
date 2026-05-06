@@ -146,7 +146,7 @@ loadCategories:  async (params?:{page?:number; search?:string; filterBy?:FilterT
            if (data.success) {
             set({
               categories: data.data.categories,
-              totalAllItems: data.data.totalInDb,
+              totalAllItems: data.data.totalInDB,
               totalItems: data.data.pagination.total,
               totalPages: data.data.pagination.totalPages,
               currentPage: params?.page ?? state.currentPage,

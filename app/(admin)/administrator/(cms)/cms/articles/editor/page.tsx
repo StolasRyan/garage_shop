@@ -106,15 +106,14 @@ const EditorPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      let finalImageUrl = "";
+      let finalImageUrl = formData.image;
       if (formData.image && formData.image.startsWith("blob:")) {
         try {
           const uploadResult = await uploadImageToServer();
           if (uploadResult) {
             finalImageUrl = uploadResult.url;
-            console.log(finalImageUrl);
           } else {
-            throw new Error("Failed to upload image");
+            console.warn("Failed to upload new image");
           }
         } catch (uploadError) {
           console.error("Error while uploading image", uploadError);
@@ -122,8 +121,6 @@ const EditorPage = () => {
             type: "error",
             message: "Failed to upload image",
           });
-          setIsSubmitting(false);
-          return;
         }
       }
 

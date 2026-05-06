@@ -1,4 +1,4 @@
-import { FileText, FolderTree, Plus, Tags } from "lucide-react";
+import { BrainCircuitIcon, FileText, FolderTree, Plus, Tags } from "lucide-react";
 import { DashboardCard } from "../types/dashboard";
 
 
@@ -38,5 +38,14 @@ import { DashboardCard } from "../types/dashboard";
             color:'purple',
             path:'/administrator/cms/semantic-core',
             actionText:'Tune'
+        },
+        {
+            id:'auto-generate',
+            title:'Auto Generation',
+            description:'AI powered content generation',
+            icon:<BrainCircuitIcon className="w-6 h-6"/>,
+            color:'orange',
+            path:'/administrator/cms/auto-generate',
+            actionText:'Generate'
         },
     ]

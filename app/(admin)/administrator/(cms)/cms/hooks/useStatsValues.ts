@@ -4,36 +4,39 @@ import { useSiteSettings } from "./useSiteSettings";
 
 export const useStatsValues = () => {
   const { siteSettings } = useSiteSettings();
-  const { totalAllItems , loadCategories} = useCategoryStore();
+  const { totalAllItems, loadCategories } = useCategoryStore();
   const [publishedCount, setPublishedCount] = useState(0);
   const [viewsCount, setViewsCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+ 
   useEffect(() => {
-   const loadAllData = async () => {
+    const loadAllData = async () => {
       try {
-        await loadCategories();
-      const response = await fetch("/administrator/cms/api/stats");
-      if(!response.ok){
-        throw new Error("Failed to upload stats");
+        const [response] = await Promise.all([
+          fetch("/administrator/cms/api/stats"),
+          loadCategories(),
+        ]);
+        if (!response.ok) {
+          throw new Error("Failed to upload stats");
+        }
+        const data = await response.json();
+        setPublishedCount(data.publishedCount || 0);
+        setViewsCount(data.totalViews || 0);
+      } catch (error) {
+        console.error("Error loading stats", error);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setPublishedCount(data.publishedCount || 0);
-      setViewsCount(data.totalViews || 0);
-    } catch (error) {
-      console.error("Error loading stats", error);
-    } finally {
-      setLoading(false);
-    }
-   }
+    };
     loadAllData();
   }, [loadCategories]);
 
-  const keywordsCount = siteSettings?.siteKeywords.length || 0;
+  const keywordsCount = siteSettings?.siteKeywords?.length || 0;
 
   return {
-    categoriesCount: totalAllItems,
-    keywordsCount,
+    categoriesCount: totalAllItems ?? 0,
+    keywordsCount: keywordsCount ?? 0,
     publishedCount,
     viewsCount,
     loading,

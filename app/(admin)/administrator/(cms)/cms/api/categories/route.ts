@@ -154,6 +154,9 @@ export async function GET(request: Request) {
       .collection<Category>("article-category")
       .countDocuments({});
 
+    
+      
+
       const totalFiltered = await db
       .collection<Category>("article-category")
       .countDocuments(filterQuery);
