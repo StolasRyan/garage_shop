@@ -61,7 +61,7 @@ const Pagination = ({type = 'categories'}:{type?:string}) => {
           Page <span className="font-medium">{currentPage}</span> of{" "}
           <span className="font-medium">{totalPages}</span>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}

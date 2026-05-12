@@ -1,6 +1,7 @@
 export type UserRole = 'user' | 'admin' | 'manager'
 
 export type UserData = {
+    _id?: string;
     id: string;
     name: string;
     surname:string;
